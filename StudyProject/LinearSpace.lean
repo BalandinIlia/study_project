@@ -17,15 +17,15 @@ class LinSp(TCoef TVec: Type)
   VMulZero: ∀v: TVec, mulV zero v = VZero
   VMulOne: ∀v: TVec, mulV one v = v
 
-def Func:= ℕ → ℤ
+def Seqq:= ℕ → ℤ
 
-def mulV: ℤ → Func → Func
+def mulV: ℤ → Seqq → Seqq
 | z, f => (fun n:ℕ => z*(f n))
 
-def sumV: Func → Func → Func
+def sumV: Seqq → Seqq → Seqq
 | f1, f2 => (fun n:ℕ => (f1 n) + (f2 n))
 
-instance ls: LinSp ℤ Func set5 sum5 mul5 mulV sumV :=
+instance ls: LinSp ℤ Seqq set5 sum5 mul5 mulV sumV :=
   {
     VZero := (fun n:ℕ => 0)
     VsumComm := by
