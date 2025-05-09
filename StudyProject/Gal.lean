@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Tactic.IntervalCases
-import StudyProject.Field
+import StudyProject.RingComOne
 
 namespace MY
 
@@ -65,7 +65,7 @@ lemma mull5(s1: ℤ)(s2: ℤ) : (mul5 s1 s2)∈set5 := by
   clear trans neq2
   aesop
 
-instance Gal: Field ℤ set5 sum5 mul5 :=
+instance Gal: RingComOne ℤ set5 sum5 mul5 :=
   {
     zero := 0
     one := 1
@@ -210,9 +210,9 @@ instance Gal: Field ℤ set5 sum5 mul5 :=
       simp [set5]
     oneProp := by
       simp [mul5, set5]
-    mulRev := by
-      simp [set5]
-      simp [mul5]
+    --mulRev := by
+      --simp [set5]
+      --simp [mul5]
     multDistr := by
       intro a b c aIn bIn cIn
       simp [sum5, mul5]

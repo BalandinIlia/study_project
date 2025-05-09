@@ -1,6 +1,6 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.Field
+import StudyProject.RingComOne
 import StudyProject.Gal
 
 namespace MY
@@ -11,7 +11,7 @@ class LinSp(TCoef TVec: Type)
            (mulC: TCoef → TCoef → TCoef)
            (mulV: TCoef → TVec → TVec)
            (sumV: TVec → TVec → TVec)
-           extends Field TCoef fi sumC mulC
+           extends RingComOne TCoef fi sumC mulC
            where
   VZero: TVec
   VsumComm: ∀v1 v2: TVec, sumV v1 v2 = sumV v2 v1
@@ -57,14 +57,14 @@ instance ls: LinSp ℤ Seqq set5 sum5 mul5 mulV sumV :=
       intro v
       funext n
       simp [mulV]
-      rw [Field.zero]
+      rw [RingComOne.zero]
       rw [Gal]
       simp
     VMulOne := by
       intro v
       simp [mulV]
       funext n
-      rw [Field.one]
+      rw [RingComOne.one]
       rw [Gal]
       simp
   }

@@ -3,7 +3,7 @@ import Mathlib.Data.Set.Basic
 
 namespace MY
 
-class Field(elemType: Type)(set: Set elemType)(sum: elemType → elemType → elemType)(mul: elemType → elemType → elemType) where
+class RingComOne(elemType: Type)(set: Set elemType)(sum: elemType → elemType → elemType)(mul: elemType → elemType → elemType) where
   zero: elemType
   one: elemType
 
@@ -20,6 +20,5 @@ class Field(elemType: Type)(set: Set elemType)(sum: elemType → elemType → el
   multAssoc: ∀a b c: elemType, a∈set → b∈set → c∈set → (mul (mul a b) c) = (mul a (mul b c))
   oneEx: one∈set
   oneProp: (∀a:elemType, a∈set → (mul a one) = a)
-  mulRev: ∀a:elemType, a∈set → ¬(a=zero) → (∃b:elemType, b∈set ∧ (mul a b) = one)
 
   multDistr: ∀a b c: elemType, a∈set → b∈set → c∈set → mul c (sum a b) = sum (mul c a) (mul c b)
