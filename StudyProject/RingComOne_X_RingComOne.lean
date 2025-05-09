@@ -187,3 +187,5 @@ def multiplyrings{A B:Type}
       apply hb2
       apply hb3
   }
+
+def Gal2 := multiplyrings Gal Gal
