@@ -1,6 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.Field
+import StudyProject.Gal
 
 namespace MY
 
