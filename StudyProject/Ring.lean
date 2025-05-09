@@ -1,6 +1,8 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 
+namespace MY
+
 class isSumMulDef(elemType: Type)(set: Set elemType)(sum: elemType → elemType → elemType)(mul: elemType → elemType → elemType) where
   sumDef: ∀a b: elemType, a∈set → b∈set → (sum a b)∈set
   mulDef: ∀a b: elemType, a∈set → b∈set → (mul a b)∈set

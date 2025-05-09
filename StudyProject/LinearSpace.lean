@@ -2,6 +2,8 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.Field
 
+namespace MY
+
 class LinSp(TCoef TVec: Type)
            (fi: Set TCoef)
            (sumC: TCoef → TCoef → TCoef)

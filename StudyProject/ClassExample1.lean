@@ -1,5 +1,7 @@
 import Mathlib.Data.Int.Basic
 
+namespace MY
+
 class exm (func: ℤ → ℤ) (val: ℤ) where
   arg: ℤ
   prop: func arg = val
