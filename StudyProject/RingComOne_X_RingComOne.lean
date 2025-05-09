@@ -5,18 +5,23 @@ import StudyProject.Gal
 
 namespace MY
 
+-- Pair of elements of two types: A and B
 structure Pair(A B: Type) where
 f:A
 s:B
 
+-- Cartesian product of to sets
 def Sett{A B: Type}(sa: Set A)(sb: Set B): Set (Pair A B) :=
   {p: Pair A B | p.f∈sa ∧ p.s∈sb}
 
+-- Composes operation on type A and operation on type B into operation on type Pair A B
 def OperComp{A B: Type}(sa: A → A → A)(sb: B → B → B): (Pair A B) → (Pair A B) → (Pair A B)
 | (Pair.mk f1 s1), (Pair.mk f2 s2) => (Pair.mk (sa f1 f2) (sb s1 s2))
 
 #check Pair.mk
 
+-- "Multiplies" two commutative rings with 1
+-- Result is another commutative ring with 1
 def multiplyrings{A B:Type}
                   {setA: Set A}
                   {setB: Set B}
@@ -28,15 +33,14 @@ def multiplyrings{A B:Type}
                   (ringB: RingComOne B setB sumB mulB):
 (RingComOne (Pair A B) (Sett setA setB) (OperComp sumA sumB) (OperComp mulA mulB)) :=
   {
-    zero := Pair.mk ringA.zero ringB.zero
-    one := Pair.mk ringA.one ringB.one
+    zero := @Pair.mk A B ringA.zero ringB.zero
+    one := @Pair.mk A B ringA.one ringB.one
     sumDef := by
       intro c1 c2
       let ⟨a1,b1⟩ := c1
       let ⟨a2,b2⟩ := c2
       clear c1 c2
-      simp [Sett]
-      simp [OperComp]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2
       apply And.intro
       apply ringA.sumDef
@@ -50,8 +54,7 @@ def multiplyrings{A B:Type}
       let ⟨a1,b1⟩ := c1
       let ⟨a2,b2⟩ := c2
       clear c1 c2
-      simp [Sett]
-      simp [OperComp]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2
       apply And.intro
       apply ringA.mulDef
@@ -65,9 +68,8 @@ def multiplyrings{A B:Type}
       let ⟨a1,b1⟩ := c1
       let ⟨a2,b2⟩ := c2
       clear c1 c2
-      simp [Sett]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2
-      simp [OperComp]
       apply And.intro
       apply ringA.sumComm
       apply ha1
@@ -81,9 +83,8 @@ def multiplyrings{A B:Type}
       let ⟨a2,b2⟩ := c2
       let ⟨a3,b3⟩ := c3
       clear c1 c2 c3
-      simp [Sett]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2 ha3 hb3
-      simp [OperComp]
       apply And.intro
       apply ringA.sumAssoc
       apply ha1
@@ -125,9 +126,8 @@ def multiplyrings{A B:Type}
       let ⟨a1,b1⟩ := c1
       let ⟨a2,b2⟩ := c2
       clear c1 c2
-      simp [Sett]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2
-      simp [OperComp]
       apply And.intro
       apply ringA.multComm
       apply ha1
@@ -141,9 +141,8 @@ def multiplyrings{A B:Type}
       let ⟨a2,b2⟩ := c2
       let ⟨a3,b3⟩ := c3
       clear c1 c2 c3
-      simp [Sett]
+      simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2 ha3 hb3
-      simp [OperComp]
       apply And.intro
       apply ringA.multAssoc
       apply ha1
