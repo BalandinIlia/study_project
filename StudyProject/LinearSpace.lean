@@ -92,7 +92,7 @@ class LinSpFD(TCoef TVec: Type)
     ∃p2:listProp aC (fun c:TCoef => c∈fi),
     @linComb TCoef TVec fi sumF mulF mulV sumV base aC Basis p1 p2 = v
 
-theorem th(TCoef TVec: Type)
+theorem tq(TCoef TVec: Type)
           (fi: Set TCoef)
           (sumF: TCoef → TCoef → TCoef)
           (mulF: TCoef → TCoef → TCoef)
