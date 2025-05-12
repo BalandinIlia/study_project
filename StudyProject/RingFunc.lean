@@ -108,4 +108,6 @@ theorem examp:
                   c∈linFunc →
                   d∈linFunc →
                   compos (sum a b) (sum c d) = sum (sum (compos a c) (compos b c)) (sum (compos a d) (compos b d)) := by
-  apply ringTheorem2 Func allFunc sum compos
+  intro a b c d
+  intro aIn bIn cIn dIn
+  apply ringTheorem2 RingFunc a b c d aIn bIn cIn dIn
