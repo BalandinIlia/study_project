@@ -4,5 +4,8 @@ import StudyProject.ClassExample1
 import StudyProject.Ring
 import StudyProject.RingComOne
 import StudyProject.LinearSpace
-import StudyProject.Gal
+import StudyProject.GaluaField
 import StudyProject.RingComOne_X_RingComOne
+import StudyProject.RingFunc
+import StudyProject.RingTheorems
+import StudyProject.Field

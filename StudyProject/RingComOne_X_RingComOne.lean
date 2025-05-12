@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.RingComOne
-import StudyProject.Gal
+import StudyProject.GaluaField
 
 namespace MY
 
