@@ -3,6 +3,7 @@ import Mathlib.Data.Set.Basic
 import StudyProject.RingComOne
 import StudyProject.GaluaField
 
+-- This file introduces "multiplication" of commutatative rings with one
 namespace MY
 
 -- Pair of elements of two types: A and B
@@ -10,7 +11,7 @@ structure Pair(A B: Type) where
 f:A
 s:B
 
--- Cartesian product of to sets
+-- Cartesian product of two sets
 def Sett{A B: Type}(sa: Set A)(sb: Set B): Set (Pair A B) :=
   {p: Pair A B | p.f∈sa ∧ p.s∈sb}
 
@@ -18,20 +19,22 @@ def Sett{A B: Type}(sa: Set A)(sb: Set B): Set (Pair A B) :=
 def OperComp{A B: Type}(sa: A → A → A)(sb: B → B → B): (Pair A B) → (Pair A B) → (Pair A B)
 | (Pair.mk f1 s1), (Pair.mk f2 s2) => (Pair.mk (sa f1 f2) (sb s1 s2))
 
-#check Pair.mk
-
 -- "Multiplies" two commutative rings with 1
 -- Result is another commutative ring with 1
 def multiplyrings{A B:Type}
-                  {setA: Set A}
-                  {setB: Set B}
-                  {sumA: A → A → A}
-                  {mulA: A → A → A}
-                  {sumB: B → B → B}
-                  {mulB: B → B → B}
-                  (ringA: RingComOne A setA sumA mulA)
-                  (ringB: RingComOne B setB sumB mulB):
-(RingComOne (Pair A B) (Sett setA setB) (OperComp sumA sumB) (OperComp mulA mulB)) :=
+                 {setA: Set A}
+                 {setB: Set B}
+                 {sumA: A → A → A}
+                 {mulA: A → A → A}
+                 {sumB: B → B → B}
+                 {mulB: B → B → B}
+                 (ringA: RingComOne A setA sumA mulA)
+                 (ringB: RingComOne B setB sumB mulB):
+(RingComOne (Pair A B)
+            (Sett setA setB)
+            (OperComp sumA sumB)
+            (OperComp mulA mulB)
+) :=
   {
     zero := @Pair.mk A B ringA.zero ringB.zero
     one := @Pair.mk A B ringA.one ringB.one
@@ -168,7 +171,7 @@ def multiplyrings{A B:Type}
       apply ha
       apply ringB.oneProp
       apply hb
-    multDistr := by
+    multDistrLeft := by
       intro c1 c2 c3
       let ⟨a1,b1⟩ := c1
       let ⟨a2,b2⟩ := c2
@@ -177,14 +180,35 @@ def multiplyrings{A B:Type}
       simp [Sett, OperComp]
       intro ha1 hb1 ha2 hb2 ha3 hb3
       apply And.intro
-      apply ringA.multDistr
+      apply ringA.multDistrLeft
       apply ha1
       apply ha2
       apply ha3
-      apply ringB.multDistr
+      apply ringB.multDistrLeft
+      apply hb1
+      apply hb2
+      apply hb3
+    multDistrRight := by
+      intro c1 c2 c3
+      let ⟨a1,b1⟩ := c1
+      let ⟨a2,b2⟩ := c2
+      let ⟨a3,b3⟩ := c3
+      clear c1 c2 c3
+      simp [Sett, OperComp]
+      intro ha1 hb1 ha2 hb2 ha3 hb3
+      apply And.intro
+      apply ringA.multDistrRight
+      apply ha1
+      apply ha2
+      apply ha3
+      apply ringB.multDistrRight
       apply hb1
       apply hb2
       apply hb3
   }
 
-def Gal2 := multiplyrings Gal Gal
+def GaluaRingCO := multiplyrings GaluaField.ringCO GaluaField.ringCO
+
+#print GaluaRingCO
+#eval GaluaRingCO.zero
+#eval GaluaRingCO.one

@@ -1,17 +1,11 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
+import StudyProject.Ring
 import StudyProject.RingComOne
-import StudyProject.Gal
-import StudyProject.RingComOne_X_RingComOne
+import StudyProject.GaluaField
+import StudyProject.Field
 
 namespace MY
-
-class Field(elemType: Type)
-           (set: Set elemType)
-           (sum: elemType → elemType → elemType)
-           (mul: elemType → elemType → elemType)
-  extends RingComOne elemType set sum mul where
-MultInv: ∀a:elemType, a∈set → ¬(a = zero) → (∃b:elemType, b∈set ∧ mul a b = one)
 
 -- list length
 def length{T:Type}: List T → ℕ
@@ -107,4 +101,6 @@ theorem tq(TCoef TVec: Type)
           (pIn2: listProp aC2 (fun c:TCoef => c∈fi))
           (eq: linComb linSp.base aC1 linSp.Basis pLen1 pIn1 = linComb linSp.base aC2 linSp.Basis pLen2 pIn2):
           aC1 = aC2 := by
+  generalize repl1: linComb linSp.base aC1 linSp.Basis pLen1 pIn1 = lc1
+  generalize repl2: linComb linSp.base aC2 linSp.Basis pLen2 pIn2 = lc2
   sorry

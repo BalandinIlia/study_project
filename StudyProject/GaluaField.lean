@@ -66,7 +66,7 @@ lemma mull5(s1: ℤ)(s2: ℤ) : (mul5 s1 s2)∈set5 := by
   clear trans neq2
   aesop
 
-instance Gal: Field ℤ set5 sum5 mul5 :=
+instance GaluaField: Field ℤ set5 sum5 mul5 :=
   {
     zero := 0
     one := 1
@@ -211,10 +211,137 @@ instance Gal: Field ℤ set5 sum5 mul5 :=
       simp [set5]
     oneProp := by
       simp [mul5, set5]
-    mulRev := by
+    MultInv := by
       simp [set5]
       simp [mul5]
-    multDistr := by
+    multDistrLeft := by
+      intro a b c aIn bIn cIn
+      simp [sum5, mul5]
+      cases aIn
+      case inl h =>
+        simp [h]
+        cases bIn
+        case inl => aesop
+        case inr h =>
+        cases h
+        case inl => aesop
+        case inr h =>
+        cases h
+        case inl => aesop
+        case inr h =>
+        cases h
+        case inl => aesop
+        case inr => aesop
+      case inr h =>
+        cases h
+        case inl eq =>
+          simp [eq]
+          cases bIn
+          case inl => aesop
+          case inr h =>
+          cases h
+          case inl h =>
+            simp [h]
+            omega
+          case inr h =>
+          cases h
+          case inl =>
+            cases cIn
+            case inl => aesop
+            case inr h =>
+            cases h
+            case inl => aesop
+            case inr h =>
+            cases h
+            case inl => aesop
+            case inr h =>
+            cases h
+            case inl => aesop
+            case inr => aesop
+          case inr h =>
+          cases h
+          case inl h =>
+            simp [h]
+            omega
+          case inr h =>
+            simp at h
+            simp [h]
+            omega
+        case inr h =>
+          cases h
+          case inl eq =>
+            simp [eq]
+            cases bIn
+            case inl => aesop
+            case inr h =>
+            cases h
+            case inl h =>
+              simp [h]
+              omega
+            case inr h =>
+            cases h
+            case inl h =>
+              simp [h]
+              omega
+            case inr h =>
+            cases h
+            case inl h =>
+              simp [h]
+              omega
+            case inr h =>
+              simp at h
+              simp [h]
+              omega
+          case inr eq =>
+            cases eq
+            case inl h =>
+              simp [h]
+              cases bIn
+              case inl => aesop
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+                simp at h
+                simp [h]
+                omega
+            case inr h =>
+              simp at h
+              simp [h]
+              cases bIn
+              case inl => aesop
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+              cases h
+              case inl h =>
+                simp [h]
+                omega
+              case inr h =>
+                simp at h
+                simp [h]
+                omega
+    multDistrRight := by
       intro a b c aIn bIn cIn
       simp [sum5, mul5]
       cases aIn

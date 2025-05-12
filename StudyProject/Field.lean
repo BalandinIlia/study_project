@@ -2,8 +2,6 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.Ring
 import StudyProject.RingComOne
-import StudyProject.Gal
-import StudyProject.RingComOne_X_RingComOne
 
 -- This file defines a field
 namespace MY
