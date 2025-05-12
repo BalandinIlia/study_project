@@ -5,6 +5,7 @@ import StudyProject.Ring
 import StudyProject.RingTheorems
 import StudyProject.RingFunc
 import StudyProject.RingComOne
+import StudyProject.RingComOneSet
 import StudyProject.Field
 import StudyProject.GaluaField
 import StudyProject.RingComOne_X_RingComOne
