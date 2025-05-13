@@ -6,11 +6,55 @@ import StudyProject.GaluaField
 
 namespace MY
 
-def Polynom{TElem: Type}
-           {set: Set TElem}
-           {sum: TElem → TElem → TElem}
-           {mult: TElem → TElem → TElem}
-           (_: RingComOne TElem set sum mult):Type := List TElem
+def inSet{TElem: Type}
+         (set: Set TElem)
+         (l: List TElem):Prop :=
+  match l with
+  | List.nil => True
+  | List.cons x1 xs1 => x1∈set ∧ (@inSet TElem set xs1)
+
+def sumLists{TElem: Type}
+            (zero: TElem)
+            (sum: TElem → TElem → TElem)
+            (l1: List TElem)
+            (l2: List TElem): List TElem :=
+  List.zipWithAll
+  (fun z1 z2:Option TElem =>sum (z1.getD zero) (z2.getD zero))
+  l1
+  l2
+
+-- tests
+#eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [1,2,3] []
+#eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [] [1,2,3]
+#eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [5,6] [1,2,3]
+#eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [5,6,7,8] [1,2,3]
+
+def mulLists{TElem: Type}
+            (zero: TElem)
+            (sum: TElem → TElem → TElem)
+            (mul: TElem → TElem → TElem)
+            (l1: List TElem)
+            (l2: List TElem): List TElem :=
+  match l1 with
+  | List.nil       => List.nil
+  | List.cons x xs => sumLists zero
+                               sum
+                               (List.map (fun el:TElem => mul el x) l2)
+                               (List.cons zero (mulLists zero sum mul xs l2))
+
+-- tests
+#eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [1,2,3] []
+#eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [] [1,2,3]
+#eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6] [1,2,3]
+#eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6,7,8] [1,2,3]
+
+class Polynom{TElem: Type}
+             {set: Set TElem}
+             {sum: TElem → TElem → TElem}
+             {mult: TElem → TElem → TElem}
+             (_: RingComOne TElem set sum mult) where
+  coef: List TElem
+  inRing: inSet set coef
 
 def sumPoly{TElem: Type}
            {set: Set TElem}
@@ -19,45 +63,22 @@ def sumPoly{TElem: Type}
            (ring: RingComOne TElem set sum mult)
            (p1: Polynom ring)
            (p2: Polynom ring): Polynom ring :=
-  match p1, p2 with
-  | List.nil, List.nil                 => List.nil
-  | l, List.nil                        => l
-  | List.nil, l                        => l
-  | List.cons x1 xs1, List.cons x2 xs2 => List.cons (sum x1 x2) (@sumPoly TElem set sum mult ring xs1 xs2)
+  {
+    coef := sumLists ring.zero sum p1.coef p2.coef
+    inRing := sorry
+  }
 
-
-def multSc{TElem: Type}
-          {set: Set TElem}
-          {sum: TElem → TElem → TElem}
-          {mult: TElem → TElem → TElem}
-          (ring: RingComOne TElem set sum mult)
-          (sc: TElem)
-          (p: Polynom ring): Polynom ring :=
-  match p with
-  | List.nil => List.nil
-  | List.cons x xs => List.cons (mult sc x) (@multSc TElem set sum mult ring sc xs)
-
-def multPoly{TElem: Type}
+def mulPoly{TElem: Type}
            {set: Set TElem}
            {sum: TElem → TElem → TElem}
            {mult: TElem → TElem → TElem}
            (ring: RingComOne TElem set sum mult)
            (p1: Polynom ring)
            (p2: Polynom ring): Polynom ring :=
-  match p1, p2 with
-  | List.cons x1 xs1, p =>
-      sumPoly ring (@multSc TElem set sum mult ring x1 p) (List.cons ring.zero (multPoly ring xs1 p))
-  | List.nil, _ => List.nil
-
-def inRing{TElem: Type}
-          {set: Set TElem}
-          {sum: TElem → TElem → TElem}
-          {mult: TElem → TElem → TElem}
-          {ring: RingComOne TElem set sum mult}
-          (p: (Polynom ring)):Prop :=
-  match p with
-  | List.nil => True
-  | List.cons x1 xs1 => x1∈set ∧ (@inRing TElem set sum mult ring xs1)
+  {
+    coef := mulLists ring.zero sum mult p1.coef p2.coef
+    inRing := sorry
+  }
 
 def PolyRing{TElem: Type}
             {set: Set TElem}
@@ -65,21 +86,31 @@ def PolyRing{TElem: Type}
             {mult: TElem → TElem → TElem}
             (ring: RingComOne TElem set sum mult):
             RingComOne (Polynom ring)
-                       ({p:Polynom ring | inRing p})
+                       ({p:Polynom ring | True})
                        (sumPoly ring)
-                       (multPoly ring) :=
+                       (mulPoly ring) :=
   {
     sumDef := by
       sorry
     mulDef := by sorry
-    zero := List.nil
-    one := List.cons ring.one List.nil
+    zero :=
+    {
+      coef := List.nil
+      inRing := by
+        simp [inSet]
+    }
+    one :=
+    {
+      coef := [ring.one]
+      inRing := by
+        simp [inSet]
+        apply ring.oneEx
+    }
     sumComm := by sorry
     zeroEx := by
-      simp [inRing]
+      simp
     oneEx := by
-      simp [inRing]
-      apply ring.oneEx
+      simp
     zeroProp := by sorry
     sumAssoc := by sorry
     sumRev := by sorry
