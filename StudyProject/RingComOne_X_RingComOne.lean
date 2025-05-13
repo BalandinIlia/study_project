@@ -1,6 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.RingComOne
+import StudyProject.RingComOneSet
 import StudyProject.GaluaField
 
 -- This file introduces "multiplication" of commutatative rings with one
@@ -212,3 +213,9 @@ def GaluaRingCO := multiplyrings GaluaField.ringCO GaluaField.ringCO
 #print GaluaRingCO
 #eval GaluaRingCO.zero
 #eval GaluaRingCO.one
+
+def exam := multiplyrings GaluaField.ringCO ringSets
+
+#print exam
+#check exam.zero
+#check exam.one
