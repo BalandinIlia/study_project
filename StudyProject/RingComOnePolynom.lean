@@ -6,6 +6,7 @@ import StudyProject.GaluaField
 
 namespace MY
 
+-- Utility function: check if all elements of given list belong to given set
 def inSet{TElem: Type}
          (set: Set TElem)
          (l: List TElem):Prop :=
@@ -13,6 +14,7 @@ def inSet{TElem: Type}
   | List.nil => True
   | List.cons x1 xs1 => x1∈set ∧ (@inSet TElem set xs1)
 
+-- Utility function: sums two lists according to given sum function
 def sumLists{TElem: Type}
             (zero: TElem)
             (sum: TElem → TElem → TElem)
@@ -29,6 +31,7 @@ def sumLists{TElem: Type}
 #eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [5,6] [1,2,3]
 #eval sumLists 0 (fun z1 z2:ℤ => z1+z2) [5,6,7,8] [1,2,3]
 
+-- Utility function: multiplies two lists like they are polynoms
 def mulLists{TElem: Type}
             (zero: TElem)
             (sum: TElem → TElem → TElem)
@@ -48,6 +51,39 @@ def mulLists{TElem: Type}
 #eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6] [1,2,3]
 #eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6,7,8] [1,2,3]
 
+-- Polinom (like a*x*x+b*x+c) (in our notation coefficients follow: c,b,a)
+--
+-- This is polinom above given ring, so it consists of two parts:
+-- 1) list of polynom coefficients
+-- 2) proof of that the coefficients are in the ring
+--
+-- Here we have the following hierarchy:
+-- 1) Polynom:
+--    From Lean point of view:
+--        This is a rule, which takes a ring and returns
+--        pattern for a set of terms. The pattern contains
+--        names of terms and their types
+--    From mathematical point of view:
+--        This is the most common definition of polynom:
+--        arbitrary polinom above arbitrary ring. It consists
+--        of coefficients and proof that they are from the
+--        ring
+-- 2) Polynom ring:
+--    From Lean point of view:
+--        This is a particular pattern for particular ring.
+--        All terms have definite type, however they don't
+--        have definite values.
+--    From mathematical point of view:
+--        This is a definition of polynom over particular ring.
+-- 3) Instance of Polynom ring:
+--    From Lean point of view:
+--        This is a particular values of terms specified in
+--        paragraph 2.
+--    From mathematical point of view:
+--        This is a particular polinom over particular field.
+--
+-- So this class is intended to have multiple instances of
+-- the same type.
 class Polynom{TElem: Type}
              {set: Set TElem}
              {sum: TElem → TElem → TElem}
@@ -91,8 +127,9 @@ def PolyRing{TElem: Type}
                        (mulPoly ring) :=
   {
     sumDef := by
-      sorry
-    mulDef := by sorry
+      simp
+    mulDef := by
+      simp
     zero :=
     {
       coef := List.nil
