@@ -11,3 +11,5 @@ import StudyProject.GaluaField
 import StudyProject.RingComOne_X_RingComOne
 import StudyProject.RingComOnePolynom
 import StudyProject.LinearSpace
+
+import StudyProject.exampleStandardRing
