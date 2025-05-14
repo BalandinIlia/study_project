@@ -11,8 +11,15 @@ def mult(s1 s2: MT):MT := MT.mk (s1.f*s2.f) (s1.s*s2.s)
 
 instance ins:Ring MT :=
 {
-  add := summ
   zero := MT.mk 0 0
+  one := MT.mk 1 1
+
+  add := summ
+  mul := mult
+  nsmul := (fun n:ℕ => fun m:MT => MT.mk (m.f*n) (m.s*n))
+  neg := (fun n:MT => MT.mk (-n.f) (-n.s))
+  zsmul := (fun z:ℤ => fun n:MT => MT.mk (n.f*z) (n.s*z))
+
   zero_add := by
     simp [HAdd.hAdd]
     simp [summ]
@@ -27,8 +34,6 @@ instance ins:Ring MT :=
   add_zero := by
     simp [HAdd.hAdd]
     sorry
-  nsmul := (fun n:ℕ => fun m:MT => MT.mk (m.f*n) (m.s*n))
-  mul := mult
   left_distrib := by
     simp [HAdd.hAdd]
     simp [HMul.hMul]
@@ -46,15 +51,12 @@ instance ins:Ring MT :=
   mul_assoc := by
     simp [HMul.hMul]
     sorry
-  one := MT.mk 1 1
   one_mul := by
     simp [HMul.hMul]
     sorry
   mul_one := by
     simp [HMul.hMul]
     sorry
-  neg := (fun n:MT => MT.mk (-n.f) (-n.s))
-  zsmul := (fun z:ℤ => fun n:MT => MT.mk (n.f*z) (n.s*z))
   neg_add_cancel := by
     sorry
   nsmul_zero := by
