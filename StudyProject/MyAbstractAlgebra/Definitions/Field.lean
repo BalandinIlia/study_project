@@ -7,8 +7,6 @@ import StudyProject.MyAbstractAlgebra.Definitions.RingComOne
 namespace MY
 
 class Field(elemType: Type)
-           (set: Set elemType)
-           (sum: elemType → elemType → elemType)
-           (mul: elemType → elemType → elemType)
-  extends ringCO: RingComOne elemType set sum mul where
-MultInv: ∀a:elemType, a∈set → ¬(a = zero) → (∃b:elemType, b∈set ∧ mul a b = one)
+  extends ringCO: RingComOne elemType where
+MultInv: ∀a:elemType, ¬(a = zero) →
+                      (∃b:elemType, mul a b = one)

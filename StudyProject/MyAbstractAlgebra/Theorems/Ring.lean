@@ -6,68 +6,39 @@ import StudyProject.MyAbstractAlgebra.Definitions.Ring
 namespace MY
 
 theorem ringTheorem1{t: Type}
-                    {s: Set t}
-                    {sum: t → t → t}
-                    {mul: t → t → t}
-                    (ring: Ring t s sum mul):
-  ∀a b c: t, a∈s →
-             b∈s →
-             c∈s →
-             ((a = b) ↔ (sum a c = sum c b)) := by
+                    (ring: Ring t):
+  ∀a b c: t, ((a = b) ↔ (ring.sum a c = ring.sum c b)) := by
   intro a b c
-  intro aIn bIn cIn
   apply Iff.intro
   {
     intro eq
-    have eq2: sum a c = sum b c := by
+    have eq2: ring.sum a c = ring.sum b c := by
       aesop
-    rw [ring.sumComm b c bIn cIn] at eq2
+    rw [ring.sumComm b c] at eq2
     apply eq2
   }
   {
     intro eq
-    let ⟨mc, pmc⟩ := ring.sumRev c cIn
-    have eq2: sum (sum a c) mc = sum (sum c b) mc := by
+    let ⟨mc, pmc⟩ := ring.sumRev c
+    have eq2: ring.sum (ring.sum a c) mc = ring.sum (ring.sum c b) mc := by
       aesop
-    rw [ring.sumAssoc a c mc aIn cIn] at eq2
-    rw [ring.sumComm c b cIn bIn] at eq2
-    rw [ring.sumAssoc b c mc bIn cIn] at eq2
+    rw [ring.sumAssoc a c mc] at eq2
+    rw [ring.sumComm c b] at eq2
+    rw [ring.sumAssoc b c mc] at eq2
     simp [pmc] at eq2
-    simp [ring.zeroProp a aIn] at eq2
-    simp [ring.zeroProp b bIn] at eq2
+    simp [ring.zeroProp a] at eq2
+    simp [ring.zeroProp b] at eq2
     apply eq2
-    aesop
-    aesop
   }
 
 theorem ringTheorem2{t: Type}
-                    {s: Set t}
-                    {sum: t → t → t}
-                    {mul: t → t → t}
-                    (ring: Ring t s sum mul):
-  ∀a b c d: t, a∈s →
-               b∈s →
-               c∈s →
-               d∈s →
-               mul (sum a b) (sum c d) = sum (sum (mul a c) (mul b c)) (sum (mul a d) (mul b d)) := by
+                    (ring: Ring t):
+  ∀a b c d: t, ring.mul (ring.sum a b) (ring.sum c d) = ring.sum (ring.sum (ring.mul a c) (ring.mul b c)) (ring.sum (ring.mul a d) (ring.mul b d)) := by
   intro a b c d
-  intro aIn bIn cIn dIn
 
-  rw [ring.multDistrLeft c d (sum a b)]
+  rw [ring.multDistrLeft c d (ring.sum a b)]
   rw [ring.multDistrRight a b c]
   rw [ring.multDistrRight a b d]
-
-  apply aIn
-  apply bIn
-  apply dIn
-  apply aIn
-  apply bIn
-  apply cIn
-  apply cIn
-  apply dIn
-  apply ring.sumDef
-  apply aIn
-  apply bIn
 
 -- a*0=t1
 -- a*(0+0)=a*(0+0)=t2
@@ -76,38 +47,29 @@ theorem ringTheorem2{t: Type}
 -- -a*0=t4
 -- a*0+(-a*0)=a*0+a*0+(-a*0)
 theorem multZero{T: Type}
-                {set: Set T}
-                {sum: T → T → T}
-                {mul: T → T → T}
-                (ring: Ring T set sum mul):
-  ∀a:T, a∈set → ((mul a ring.zero) = ring.zero) := by
-  intro a aIn
+                (ring: Ring T):
+  ∀a:T, (ring.mul a ring.zero) = ring.zero := by
+  intro a
 
-  let t1 := mul a ring.zero
-  have t1In: t1∈set := by
-    apply ring.mulDef
-    apply aIn
-    apply ring.zeroEx
-  let t2 := mul a (sum ring.zero ring.zero)
-  let t3 := sum t1 t1
-  let ⟨t4, tmp⟩ := ring.sumRev t1 t1In
-  let ⟨t4In, t4Inv⟩ := tmp
-  clear tmp
+  let t1 := ring.mul a ring.zero
+  let t2 := ring.mul a (ring.sum ring.zero ring.zero)
+  let t3 := ring.sum t1 t1
+  let ⟨t4, t4Inv⟩ := ring.sumRev t1
 
   have eq1: t1=t2 := by
-    simp [t1, t2, (ring.zeroProp ring.zero ring.zeroEx)]
+    simp [t1, t2, (ring.zeroProp ring.zero)]
   have eq2: t2=t3 := by
-    simp [t2, t3, ring.multDistrLeft ring.zero ring.zero a ring.zeroEx ring.zeroEx aIn, t1]
+    simp [t2, t3, ring.multDistrLeft ring.zero ring.zero a, t1]
   have eq3: t1=t3 := by
     apply Eq.trans eq1 eq2
-  have eq4: sum t1 t4 = sum t3 t4 := by
+  have eq4: ring.sum t1 t4 = ring.sum t3 t4 := by
     simp [eq3]
 
   simp [t3] at eq4
   rw [t4Inv] at eq4
-  rw [ring.sumAssoc t1 t1 t4 t1In t1In t4In] at eq4
+  rw [ring.sumAssoc t1 t1 t4] at eq4
   rw [t4Inv] at eq4
-  rw [ring.zeroProp t1 t1In] at eq4
+  rw [ring.zeroProp t1] at eq4
   simp [t1] at eq4
   rw [Eq.comm] at eq4
   apply eq4

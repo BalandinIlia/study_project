@@ -22,25 +22,12 @@ def diff2(s1: Set ℤ)(s2: Set ℤ): Set ℤ :=
 
 def inter(s1: Set ℤ)(s2: Set ℤ): Set ℤ := s1 ∩ s2
 
-instance ringSets: RingComOne (Set ℤ)
-                              ({s:Set ℤ | True})
-                              diff2
-                              inter :=
+instance ringSets: RingComOne (Set ℤ) :=
   {
-    sumDef := by
-      intro s1 s2
-      intro t1 t2
-      clear t1 t2
-      simp [diff2, inter, diff]
-    mulDef := by
-      intro s1 s2
-      intro t1 t2
-      clear t1 t2
-      simp [diff2, inter, diff]
+    sum := diff2
+    mul := inter
     sumComm := by
       intro s1 s2
-      intro t1 t2
-      clear t1 t2
       simp [diff2, inter, diff, Set.union_def]
       have helper: ∀a:ℤ, (a ∈ s1 ∧ a ∉ s2 ∨ a ∈ s2 ∧ a ∉ s1) ↔
                          (a ∈ s2 ∧ a ∉ s1 ∨ a ∈ s1 ∧ a ∉ s2) := by
@@ -57,8 +44,6 @@ instance ringSets: RingComOne (Set ℤ)
       apply Set.ext helper
     sumAssoc := by
       intro s1 s2 s3
-      intro t1 t2 t3
-      clear t1 t2 t3
       simp [inter, diff2, diff]
       simp [Set.union_def]
       have helper: ∀a:ℤ, ((a∈s1 ∧ a∉s2 ∨ a∈s2 ∧ a∉s1) ∧ a∉s3 ∨ (a∈s3 ∧ (a∈s1 → a∈s2)) ∧ a∈s3 ∧ (a∈s2 → a∈s1)) ↔
@@ -84,47 +69,32 @@ instance ringSets: RingComOne (Set ℤ)
         }
       apply Set.ext helper
     zero := {}
-    zeroEx := by
-      simp
     zeroProp := by
       simp [diff2, diff]
     sumRev := by
       intro s1
-      intro t1
-      clear t1
       exists s1
-      simp
       simp [diff2]
       simp [diff]
     multComm := by
       intro s1 s2
-      intro t1 t2
-      clear t1 t2
       simp [inter, diff2, diff]
       apply Set.inter_comm
     multAssoc := by
       intro s1 s2 s3
-      intro t1 t2 t3
-      clear t1 t2 t3
       simp [inter, diff2, diff]
       apply Set.inter_assoc
     multDistrLeft := by
       intro s1 s2 s3
-      intro t1 t2 t3
-      clear t1 t2 t3
       simp [inter, diff2, diff]
       simp [Set.union_def]
       aesop
     multDistrRight := by
       intro s1 s2 s3
-      intro t1 t2 t3
-      clear t1 t2 t3
       simp [inter, diff2, diff]
       simp [Set.union_def]
       aesop
     one := {z:ℤ | True}
-    oneEx := by
-      simp
     oneProp := by
       simp [inter]
   }

@@ -6,122 +6,103 @@ import StudyProject.MyAbstractAlgebra.Definitions.Field
 -- This file gives an example of field: Galua filed mod 5
 namespace MY
 
-def set5: Set ℤ := {0, 1, 2, 3, 4}
+def univers: Set ℤ := {0, 1, 2, 3, 4}
 
-def sum5(s1: ℤ)(s2: ℤ) := (s1+s2)%5
+structure ElemGal where
+val: ℤ
+prop: val∈univers
 
-lemma summ5(s1: ℤ)(s2: ℤ) : (sum5 s1 s2)∈set5 := by
-  generalize repl: sum5 s1 s2 = A
-  rw [Eq.comm] at repl
-  have neq1: A < 5 := by
-    simp [sum5] at repl
-    rw [repl]
+def sumGal(a b: ElemGal): ElemGal :=
+{
+  val := (a.val+b.val)%5
+  prop := by
+    simp [univers]
+    generalize repl:(a.val+b.val)%5=A
     omega
-  have neq2: A ≥ 0 := by
-    simp [sum5] at repl
-    rw [repl]
-    omega
-  clear s1 s2 repl
-  have trans(g: ℤ): g≥0 → g<5 → g∈set5 := by
-    clear A neq1 neq2
-    simp [set5]
-    intro h1 h2
-    interval_cases g
-    aesop
-    aesop
-    aesop
-    aesop
-    aesop
-  apply trans
-  aesop
-  clear trans neq2
-  aesop
+}
 
-def mul5(s1: ℤ)(s2: ℤ) := (s1*s2)%5
-
-lemma mull5(s1: ℤ)(s2: ℤ) : (mul5 s1 s2)∈set5 := by
-  generalize repl: mul5 s1 s2 = A
-  rw [Eq.comm] at repl
-  have neq1: A < 5 := by
-    simp [mul5] at repl
-    rw [repl]
+def mulGal(a b: ElemGal): ElemGal :=
+{
+  val := (a.val*b.val)%5
+  prop := by
+    simp [univers]
+    generalize repl:(a.val+b.val)%5=A
     omega
-  have neq2: A ≥ 0 := by
-    simp [mul5] at repl
-    rw [repl]
-    omega
-  clear s1 s2 repl
-  have trans(g: ℤ): g≥0 → g<5 → g∈set5 := by
-    clear A neq1 neq2
-    simp [set5]
-    intro h1 h2
-    interval_cases g
-    aesop
-    aesop
-    aesop
-    aesop
-    aesop
-  apply trans
-  aesop
-  clear trans neq2
-  aesop
+}
 
-instance GaluaField: Field ℤ set5 sum5 mul5 :=
+instance GaluaField: Field ElemGal :=
   {
-    zero := 0
-    one := 1
-    sumDef := by
-      intro a b
-      intro aIn bIn
-      apply summ5
-    mulDef := by
-      intro a b
-      intro aIn bIn
-      simp [set5] at aIn bIn
-      apply mull5
+    sum := sumGal
+    mul := mulGal
+
+    zero :=
+    {
+      val := 0
+      prop := by
+        simp [univers]
+    }
+    one :=
+    {
+      val := 1
+      prop := by
+        simp [univers]
+    }
+
     sumComm := by
       intro a b
-      intro aIn bIn
-      simp [sum5]
+      simp [sumGal]
       omega
     sumAssoc := by
-      simp [sum5]
+      simp [sumGal]
       omega
-    zeroEx := by
-      simp [set5]
     zeroProp := by
       intro a
-      simp [set5]
-      simp [sum5]
-      intro aIn
-      cases aIn
-      case inl => aesop
-      case inr h =>
-        cases h
-        case inl => aesop
-        case inr h =>
-          cases h
-          case inl => aesop
-          case inr h =>
-            cases h
-            case inl => aesop
-            case inr => aesop
+      simp [sumGal]
+      have eq:a.val%5=a.val := by
+        cases a.prop
+        case inl => omega
+        case inr pr => cases pr
+                       case inl => omega
+                       case inr pr2 => cases pr2
+                                       case inl => omega
+                                       case inr pr3 => cases pr3
+                                                       case inl => omega
+                                                       case inr pr4 => simp at pr4
+                                                                       omega
+      simp [eq]
     sumRev := by
-      simp [set5, sum5]
+      intro a
+      exists
+      {
+        val := (5-a.val)%5
+        prop := by
+          simp [univers]
+          cases a.prop
+          case inl => aesop
+          case inr pr => cases pr
+                         case inl => aesop
+                         case inr pr2 => cases pr2
+                                         case inl => omega
+                                         case inr pr3 => cases pr3
+                                                         case inl => omega
+                                                         case inr pr4 => simp at pr4
+                                                                         omega
+      }
+      simp [sumGal]
     multComm := by
-      simp [mul5]
-      intro a b aIn bIn
+      simp [mulGal]
+      intro a b
       rw [Int.mul_comm]
     multAssoc := by
-      intro a b c aIn bIn cIn
-      simp [mul5]
-      cases aIn
+      intro a b c
+      simp [mulGal]
+      cases a.prop
       case inl => aesop
       case inr h =>
         cases h
         case inl eq =>
           simp [eq]
-          cases bIn
+          cases b.prop
           case inl => aesop
           case inr h =>
           cases h
@@ -137,7 +118,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
           cases h
           case inl eq =>
             simp [eq]
-            cases bIn
+            cases b.prop
             case inl => aesop
             case inr h =>
             cases h
@@ -162,7 +143,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             cases eq
             case inl h =>
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
@@ -186,7 +167,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             case inr h =>
               simp at h
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
@@ -207,20 +188,30 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
                 simp at h
                 simp [h]
                 omega
-    oneEx := by
-      simp [set5]
     oneProp := by
-      simp [mul5, set5]
+      simp [mulGal]
+      intro a
+      have eq:a.val%5=a.val := by
+        cases a.prop
+        case inl => omega
+        case inr pr => cases pr
+                       case inl => omega
+                       case inr pr2 => cases pr2
+                                       case inl => omega
+                                       case inr pr3 => cases pr3
+                                                       case inl => omega
+                                                       case inr pr4 => simp at pr4
+                                                                       omega
+      simp [eq]
     MultInv := by
-      simp [set5]
-      simp [mul5]
+      sorry
     multDistrLeft := by
-      intro a b c aIn bIn cIn
-      simp [sum5, mul5]
-      cases aIn
+      intro a b c
+      simp [sumGal, mulGal]
+      cases a.prop
       case inl h =>
         simp [h]
-        cases bIn
+        cases b.prop
         case inl => aesop
         case inr h =>
         cases h
@@ -236,7 +227,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
         cases h
         case inl eq =>
           simp [eq]
-          cases bIn
+          cases b.prop
           case inl => aesop
           case inr h =>
           cases h
@@ -246,7 +237,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
           case inr h =>
           cases h
           case inl =>
-            cases cIn
+            cases c.prop
             case inl => aesop
             case inr h =>
             cases h
@@ -271,7 +262,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
           cases h
           case inl eq =>
             simp [eq]
-            cases bIn
+            cases b.prop
             case inl => aesop
             case inr h =>
             cases h
@@ -296,7 +287,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             cases eq
             case inl h =>
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
@@ -320,7 +311,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             case inr h =>
               simp at h
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
@@ -342,12 +333,12 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
                 simp [h]
                 omega
     multDistrRight := by
-      intro a b c aIn bIn cIn
-      simp [sum5, mul5]
-      cases aIn
+      intro a b c
+      simp [sumGal, mulGal]
+      cases a.prop
       case inl h =>
         simp [h]
-        cases bIn
+        cases b.prop
         case inl => aesop
         case inr h =>
         cases h
@@ -363,7 +354,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
         cases h
         case inl eq =>
           simp [eq]
-          cases bIn
+          cases b.prop
           case inl => aesop
           case inr h =>
           cases h
@@ -373,7 +364,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
           case inr h =>
           cases h
           case inl =>
-            cases cIn
+            cases c.prop
             case inl => aesop
             case inr h =>
             cases h
@@ -398,7 +389,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
           cases h
           case inl eq =>
             simp [eq]
-            cases bIn
+            cases b.prop
             case inl => aesop
             case inr h =>
             cases h
@@ -423,7 +414,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             cases eq
             case inl h =>
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
@@ -447,7 +438,7 @@ instance GaluaField: Field ℤ set5 sum5 mul5 :=
             case inr h =>
               simp at h
               simp [h]
-              cases bIn
+              cases b.prop
               case inl => aesop
               case inr h =>
               cases h
