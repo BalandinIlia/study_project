@@ -1,9 +1,9 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.Ring
-import StudyProject.RingComOne
-import StudyProject.GaluaField
-import StudyProject.Field
+import StudyProject.MyAbstractAlgebra.Ring
+import StudyProject.MyAbstractAlgebra.RingComOne
+import StudyProject.MyAbstractAlgebra.GaluaField
+import StudyProject.MyAbstractAlgebra.Field
 
 namespace MY
 

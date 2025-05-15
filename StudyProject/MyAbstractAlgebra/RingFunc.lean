@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.Ring
-import StudyProject.RingTheorems
+import StudyProject.MyAbstractAlgebra.Ring
+import StudyProject.MyAbstractAlgebra.RingTheorems
 
 -- This field provides an example of ring consisting of:
 -- 1) Set of linear functions

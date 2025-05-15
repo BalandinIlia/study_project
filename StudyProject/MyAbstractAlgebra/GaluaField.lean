@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Tactic.IntervalCases
-import StudyProject.Field
+import StudyProject.MyAbstractAlgebra.Field
 
 -- This file gives an example of field: Galua filed mod 5
 namespace MY

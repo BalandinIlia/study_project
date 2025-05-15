@@ -1,6 +1,6 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.Ring
+import StudyProject.MyAbstractAlgebra.Ring
 
 -- This file defines commutative ring with one
 namespace MY
