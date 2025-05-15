@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.MyAbstractAlgebra.Definitions.RingComOne
-import StudyProject.MyAbstractAlgebra.Examples.RingComOneSet
+import StudyProject.MyAbstractAlgebra.Examples.RingOfSets
 import StudyProject.MyAbstractAlgebra.Examples.GaluaField
 
 namespace MY
