@@ -46,3 +46,5 @@ eq: a+b=c
 
 theorem foo[ef:suuum 1 1 3]:1+1=3:=by
   apply ef.eq
+
+#print axioms foo
