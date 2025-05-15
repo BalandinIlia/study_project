@@ -1,8 +1,8 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.MyAbstractAlgebra.RingComOne
-import StudyProject.MyAbstractAlgebra.RingComOneSet
-import StudyProject.MyAbstractAlgebra.GaluaField
+import StudyProject.MyAbstractAlgebra.Definitions.RingComOne
+import StudyProject.MyAbstractAlgebra.Examples.RingComOneSet
+import StudyProject.MyAbstractAlgebra.Examples.GaluaField
 
 namespace MY
 

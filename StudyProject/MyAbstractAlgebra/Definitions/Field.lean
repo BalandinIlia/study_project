@@ -1,7 +1,7 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.MyAbstractAlgebra.Ring
-import StudyProject.MyAbstractAlgebra.RingComOne
+import StudyProject.MyAbstractAlgebra.Definitions.Ring
+import StudyProject.MyAbstractAlgebra.Definitions.RingComOne
 
 -- This file defines a field
 namespace MY

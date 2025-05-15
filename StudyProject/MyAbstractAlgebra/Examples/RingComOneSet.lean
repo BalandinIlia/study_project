@@ -1,6 +1,6 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.MyAbstractAlgebra.RingComOne
+import StudyProject.MyAbstractAlgebra.Definitions.RingComOne
 
 namespace MY
 

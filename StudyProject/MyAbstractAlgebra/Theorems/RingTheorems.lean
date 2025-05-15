@@ -1,6 +1,6 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
-import StudyProject.MyAbstractAlgebra.Ring
+import StudyProject.MyAbstractAlgebra.Definitions.Ring
 
 -- This file provides some theorems for rings
 namespace MY
