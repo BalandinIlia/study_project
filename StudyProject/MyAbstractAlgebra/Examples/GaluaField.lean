@@ -216,11 +216,11 @@ instance GaluaField: Field ElemGal :=
       case inl h =>
         rw [zeroGal] at nz
         apply False.elim
-        have eq:a = { val := 0, prop := zeroGal._proof_5 } := by
-          clear nz
-          cases a
-          case mk z prz =>
-            aesop
+        have nnz:a = { val := 0, prop := zeroGal._proof_5 } := by
+          apply ElemGal.ext
+          simp
+          apply h
+        clear h
         aesop
       case inr pr => cases pr
                      case inl h =>
