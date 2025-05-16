@@ -8,9 +8,13 @@ namespace MY
 
 def univers: Set ℤ := {0, 1, 2, 3, 4}
 
+@[ext]
 structure ElemGal where
 val: ℤ
 prop: val∈univers
+
+#check ElemGal.ext
+#check ElemGal.ext_iff
 
 def sumGal(a b: ElemGal): ElemGal :=
 {
