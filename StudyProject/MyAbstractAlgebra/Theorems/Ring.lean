@@ -4,6 +4,7 @@ import StudyProject.MyAbstractAlgebra.Definitions.Ring
 import StudyProject.MyAbstractAlgebra.Examples.RingOfSets
 import StudyProject.MyAbstractAlgebra.Examples.GaluaField
 import StudyProject.MyAbstractAlgebra.Constructions.RingDirectProduct
+import StudyProject.MyAbstractAlgebra.Constructions.PolinomAboveRing
 
 -- This file provides some theorems for rings
 namespace MY
@@ -104,8 +105,6 @@ theorem ex2(s: Pair (Set ℤ) ElemGal):
 
 #print axioms ex2
 
--- This theorem uses the existing instance of
--- Ring (Pair (Set ℤ) ElemGal)
 theorem ex3(s: Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ))):
   (OperComp inter (OperComp inter inter))
         s
@@ -115,3 +114,9 @@ theorem ex3(s: Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ))):
   apply multZero (Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ)))
 
 #print axioms ex3
+
+#check mulLists
+
+theorem ex4(s: List ElemGal):
+  (mulLists zeroGal sumGal mulGal s List.nil) = List.nil := by
+  apply multZero (List ElemGal) s

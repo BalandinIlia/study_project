@@ -43,9 +43,9 @@ def mulLists{TElem: Type}
 #eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6] [1,2,3]
 #eval mulLists 0 (fun z1 z2:ℤ => z1+z2) (fun z1 z2:ℤ => z1*z2) [5,6,7,8] [1,2,3]
 
-def PolyRing{TElem: Type}
-            (ring: RingComOne TElem):
-            RingComOne (List TElem):=
+instance PolyRing(TElem: Type)
+                 [ring: RingComOne TElem]:
+                 RingComOne (List TElem):=
   {
     sum := sumLists ring.zero ring.sum
     mul := mulLists ring.zero ring.sum ring.mul
@@ -64,8 +64,6 @@ def PolyRing{TElem: Type}
     multComm := by sorry
   }
 
-def polySets := PolyRing ringSets
+--instance ins:RingComOne (List ElemGal):=PolyRing ElemGal
 
-#print polySets
-#check polySets.zero
-#check polySets.one
+--#check ins
