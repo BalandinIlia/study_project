@@ -120,3 +120,5 @@ theorem ex3(s: Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ))):
 theorem ex4(s: List ElemGal):
   (mulLists zeroGal sumGal mulGal s List.nil) = List.nil := by
   apply multZero (List ElemGal) s
+
+#print axioms ex4

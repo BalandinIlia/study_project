@@ -63,7 +63,3 @@ instance PolyRing(TElem: Type)
     oneProp := by sorry
     multComm := by sorry
   }
-
---instance ins:RingComOne (List ElemGal):=PolyRing ElemGal
-
---#check ins
