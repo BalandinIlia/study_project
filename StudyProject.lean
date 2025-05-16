@@ -12,3 +12,4 @@ import StudyProject.MyAbstractAlgebra.Constructions.RingDirectProduct
 import StudyProject.MyAbstractAlgebra.Constructions.PolinomAboveRing
 import StudyProject.MyLinearAlgebra.LinearSpace
 import StudyProject.StandardAbstractAlgebra.exampleStandardRing
+import StudyProject.Experiment1
