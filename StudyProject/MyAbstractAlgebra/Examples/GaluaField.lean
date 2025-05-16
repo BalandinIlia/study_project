@@ -30,17 +30,19 @@ def mulGal(a b: ElemGal): ElemGal :=
     omega
 }
 
-instance GaluaField: Field ElemGal :=
-  {
-    sum := sumGal
-    mul := mulGal
-
-    zero :=
+def zeroGal:ElemGal :=
     {
       val := 0
       prop := by
         simp [univers]
     }
+
+instance GaluaField: Field ElemGal :=
+  {
+    sum := sumGal
+    mul := mulGal
+
+    zero := zeroGal
     one :=
     {
       val := 1
@@ -69,7 +71,7 @@ instance GaluaField: Field ElemGal :=
                                                        case inl => omega
                                                        case inr pr4 => simp at pr4
                                                                        omega
-      simp [eq]
+      simp [eq, zeroGal]
     sumRev := by
       intro a
       exists
@@ -88,7 +90,7 @@ instance GaluaField: Field ElemGal :=
                                                          case inr pr4 => simp at pr4
                                                                          omega
       }
-      simp [sumGal]
+      simp [sumGal, zeroGal]
     multComm := by
       simp [mulGal]
       intro a b
@@ -204,7 +206,55 @@ instance GaluaField: Field ElemGal :=
                                                                        omega
       simp [eq]
     MultInv := by
-      sorry
+      intro a
+      intro nz
+      cases a.prop
+      case inl h =>
+        rw [zeroGal] at nz
+        apply False.elim
+        have eq:a = { val := 0, prop := zeroGal._proof_5 } := by
+          clear nz
+          cases a
+          case mk z prz =>
+            aesop
+        aesop
+      case inr pr => cases pr
+                     case inl h =>
+                       exists
+                       {
+                         val := 1
+                         prop := by
+                           simp [univers]
+                       }
+                       simp [h, mulGal]
+                     case inr pr2 => cases pr2
+                                     case inl h =>
+                                       exists
+                                       {
+                                         val := 3
+                                         prop := by
+                                           simp [univers]
+                                       }
+                                       simp [h, mulGal]
+                                     case inr pr3 => cases pr3
+                                                     case inl h =>
+                                                       exists
+                                                       {
+                                                         val := 2
+                                                         prop := by
+                                                           simp [univers]
+                                                       }
+                                                       simp [h, mulGal]
+                                                     case inr pr4 =>
+                                                       exists
+                                                       {
+                                                         val := 4
+                                                         prop := by
+                                                           simp [univers]
+                                                       }
+                                                       simp [pr4, mulGal]
+                                                       simp at pr4
+                                                       simp [pr4]
     multDistrLeft := by
       intro a b c
       simp [sumGal, mulGal]

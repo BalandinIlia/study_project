@@ -18,9 +18,9 @@ def OperComp{A B: Type}(sa: A → A → A)(sb: B → B → B): (Pair A B) → (P
 
 -- "Multiplies" two commutative rings with 1
 -- Result is another commutative ring with 1
-def multiplyrings{A B:Type}
-                 (ringA: RingComOne A)
-                 (ringB: RingComOne B):
+instance multiplyrings(A B:Type)
+                 [ringA: RingComOne A]
+                 [ringB: RingComOne B]:
 (RingComOne (Pair A B)) :=
   {
     sum := OperComp ringA.sum ringB.sum
@@ -113,14 +113,16 @@ def multiplyrings{A B:Type}
       apply ringB.multDistrRight
     }
 
-def GaluaRingCO := multiplyrings GaluaField.ringCO GaluaField.ringCO
+--instance ins: RingComOne (Pair (Set ℤ) ElemGal) := multiplyrings (Set ℤ) ElemGal
 
-#print GaluaRingCO
-#check GaluaRingCO.zero
-#check GaluaRingCO.one
+--def GaluaRingCO := multiplyrings GaluaField.ringCO GaluaField.ringCO
 
-def exam := multiplyrings GaluaField.ringCO ringSets
+--#print GaluaRingCO
+--#check GaluaRingCO.zero
+--#check GaluaRingCO.one
 
-#print exam
-#check exam.zero
-#check exam.one
+--def exam := multiplyrings GaluaField.ringCO ringSets
+
+--#print exam
+--#check exam.zero
+--#check exam.one

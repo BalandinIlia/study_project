@@ -1,12 +1,15 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import StudyProject.MyAbstractAlgebra.Definitions.Ring
+import StudyProject.MyAbstractAlgebra.Examples.RingOfSets
+import StudyProject.MyAbstractAlgebra.Examples.GaluaField
+import StudyProject.MyAbstractAlgebra.Constructions.RingDirectProduct
 
 -- This file provides some theorems for rings
 namespace MY
 
-theorem ringTheorem1{t: Type}
-                    (ring: Ring t):
+theorem ringTheorem1(t: Type)
+                    [ring: Ring t]:
   ∀a b c: t, ((a = b) ↔ (ring.sum a c = ring.sum c b)) := by
   intro a b c
   apply Iff.intro
@@ -31,8 +34,8 @@ theorem ringTheorem1{t: Type}
     apply eq2
   }
 
-theorem ringTheorem2{t: Type}
-                    (ring: Ring t):
+theorem ringTheorem2(t: Type)
+                    [ring: Ring t]:
   ∀a b c d: t, ring.mul (ring.sum a b) (ring.sum c d) = ring.sum (ring.sum (ring.mul a c) (ring.mul b c)) (ring.sum (ring.mul a d) (ring.mul b d)) := by
   intro a b c d
 
@@ -40,14 +43,16 @@ theorem ringTheorem2{t: Type}
   rw [ring.multDistrRight a b c]
   rw [ring.multDistrRight a b d]
 
--- a*0=t1
--- a*(0+0)=a*(0+0)=t2
--- a*(0+0)=a*0+a*0=t3
--- a*0=a*0+a*0
--- -a*0=t4
--- a*0+(-a*0)=a*0+a*0+(-a*0)
-theorem multZero{T: Type}
-                (ring: Ring T):
+-- This theorem:
+-- From Lean point of view:
+--     There is a propostion parametrized by type T.
+--     This theorem is a proof of the proposition, which
+--     takes that instance Ring T exists as given.
+-- From mathematical point of view:
+--     This is a theorem, which is true for any type T
+--     forming a ring.
+theorem multZero(T: Type)
+                [ring: Ring T]:
   ∀a:T, (ring.mul a ring.zero) = ring.zero := by
   intro a
 
@@ -73,3 +78,40 @@ theorem multZero{T: Type}
   simp [t1] at eq4
   rw [Eq.comm] at eq4
   apply eq4
+
+theorem ex1(s: Set ℤ):inter s {} = {} := by
+  revert s
+  -- Here we take a particular instance of multZero
+  -- Necessary ring is found/generated automatically
+  apply multZero (Set ℤ)
+
+#print axioms ex1
+
+theorem ex1_2(s: ElemGal):
+  mulGal s zeroGal = zeroGal := by
+  revert s
+  apply multZero ElemGal
+
+-- This theorem uses the existing instance of
+-- Ring (Pair (Set ℤ) ElemGal)
+theorem ex2(s: Pair (Set ℤ) ElemGal):
+  (OperComp inter mulGal)
+        s
+        (@Pair.mk (Set ℤ) ElemGal {} zeroGal) =
+  (@Pair.mk (Set ℤ) ElemGal {} zeroGal) := by
+  revert s
+  apply multZero (Pair (Set ℤ) ElemGal)
+
+#print axioms ex2
+
+-- This theorem uses the existing instance of
+-- Ring (Pair (Set ℤ) ElemGal)
+theorem ex3(s: Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ))):
+  (OperComp inter (OperComp inter inter))
+        s
+        (@Pair.mk (Set ℤ) _ {} (@Pair.mk (Set ℤ) (Set ℤ) {} {})) =
+  (@Pair.mk (Set ℤ) _ {} (@Pair.mk (Set ℤ) (Set ℤ) {} {})) := by
+  revert s
+  apply multZero (Pair (Set ℤ) (Pair (Set ℤ) (Set ℤ)))
+
+#print axioms ex3
