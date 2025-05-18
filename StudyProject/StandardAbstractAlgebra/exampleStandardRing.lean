@@ -9,6 +9,9 @@ def summ(s1 s2: MT):MT := MT.mk (s1.f+s2.f) (s1.s+s2.s)
 
 def mult(s1 s2: MT):MT := MT.mk (s1.f*s2.f) (s1.s*s2.s)
 
+#check HAdd
+#check HAdd.hAdd
+
 instance ins:Ring MT :=
 {
   zero := MT.mk 0 0
