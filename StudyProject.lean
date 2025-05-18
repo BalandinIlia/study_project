@@ -14,3 +14,4 @@ import StudyProject.MyLinearAlgebra.LinearSpace
 import StudyProject.StandardAbstractAlgebra.exampleStandardRing
 import StudyProject.StandardLinearAlgebra.example
 import StudyProject.Experiment1
+import StudyProject.ExperimentMonad
