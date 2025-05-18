@@ -1,5 +1,7 @@
 import Mathlib.Control.Monad.Basic
 
+namespace MonadExperiment
+
 -- Integer numbers
 inductive Z where
 -- zero
