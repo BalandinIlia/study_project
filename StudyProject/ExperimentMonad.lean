@@ -1,4 +1,5 @@
 import Mathlib.Control.Monad.Basic
+import Mathlib.Control.Applicative
 
 namespace MonadExperiment
 
@@ -19,6 +20,20 @@ def str(z:Z):String:=match z with
 -- All types are
 -- Z or
 -- Z->Z or Z->Z->Z or ...
+
+-- Type name in order to distinguish types
+class TypeType(T: Type) where
+  name: String
+
+instance ins1: TypeType Z := {name:="value"}
+instance ins2: TypeType (Z→Z) := {name:="function"}
+instance ins3: TypeType (Z→Z→Z) := {name:="function"}
+instance ins4: TypeType (Z→Z→Z→Z) := {name:="function"}
+instance ins5: TypeType (Z→Z→Z→Z→Z) := {name:="function"}
+instance ins6: TypeType (Z→Z→Z→Z→Z→Z) := {name:="function"}
+instance ins7: TypeType (Z→Z→Z→Z→Z→Z→Z) := {name:="function"}
+instance ins8: TypeType (Z→Z→Z→Z→Z→Z→Z→Z) := {name:="function"}
+instance ins9: TypeType T := {name:="other"}
 
 -- Does z contain only next constructors?
 def allNext(z:Z):Bool :=
@@ -43,17 +58,23 @@ inductive Canon where
 --     Term is not granted to have canonical form
 -- For function result:
 --     Function is not granted to return canonical form
+-- For function obtained by partial application:
+--     There was a parameter, whose canonical form is not granted
 | notGr: Canon
 -- For just Z:
 --     Term is granted to have canonical form
 -- For function result:
 --     Function is granted to have canonical form if all
 --     input parameters are canonical form
+-- For function obtained by partial application:
+--     Canonical form of all applied parameters is granted.
 | granted: Canon
 -- For just Z:
 --     Term is granted to have canonical form
 -- For function result:
 --     Function is granted to return canonical form
+-- For function obtained by partial application:
+--     Canonical form of all applied parameters is granted.
 | super: Canon
 
 structure Spec(T: Type) where
@@ -68,9 +89,17 @@ instance f:ToString (Spec Z):=
   | Canon.super => String.append "Super:" (str a.val)
 }
 
-def pureImp{T: Type}(a: T): Spec T := Spec.mk a Canon.notGr
+def pureImp{T: Type}(a: T)[n: TypeType T]: Spec T :=
+if n.name=="value" then Spec.mk a Canon.notGr
+                   else Spec.mk a Canon.granted
 
-def bindImp{α β : Type}(a: Spec α)(f: α → Spec β): Spec β :=
+def pureImp2{T: Type}(a: T): Spec T := pureImp a
+
+def bindImp{α β : Type}
+           (a: Spec α)
+           (f: α → Spec β)
+           [n: TypeType β]: Spec β :=
+if n.name=="value" then
   match a.canon with
   | Canon.notGr => match (f a.val).canon with
                    | Canon.notGr => Spec.mk (f a.val).val Canon.notGr
@@ -84,12 +113,39 @@ def bindImp{α β : Type}(a: Spec α)(f: α → Spec β): Spec β :=
                    | Canon.notGr => Spec.mk (f a.val).val Canon.notGr
                    | Canon.granted => Spec.mk (f a.val).val Canon.granted
                    | Canon.super => Spec.mk (f a.val).val Canon.granted
+else
+  match a.canon with
+  | Canon.notGr => Spec.mk (f a.val).val Canon.notGr
+  | Canon.granted => Spec.mk (f a.val).val Canon.granted
+  | Canon.super => Spec.mk (f a.val).val Canon.granted
 
-instance ins: Monad Spec :=
+def bindImp2{α β : Type}
+            (a: Spec α)
+            (f: α → Spec β): Spec β := bindImp a f
+
+instance mon: Monad Spec :=
 {
-  pure := pureImp
-  bind := bindImp
+  pure := pureImp2
+  bind := bindImp2
 }
+
+def apply{α β : Type}
+          (a: Spec α)
+          (f: Spec (α → Spec β))
+          [n: TypeType β] :=
+if n.name=="function" then
+  match (f.val a.val).canon with
+  | Canon.super => Spec.mk (f.val a.val).val Canon.granted
+  | Canon.notGr => Spec.mk (f.val a.val).val Canon.notGr
+  | Canon.granted => match f.canon with
+                     | Canon.super => Spec.mk (f.val a.val).val a.canon
+                     | Canon.granted => Spec.mk (f.val a.val).val a.canon
+                     | Canon.notGr => Spec.mk (f.val a.val).val Canon.notGr
+else
+  match f.canon with
+  | Canon.notGr => Spec.mk (f.val a.val).val Canon.notGr
+  | Canon.granted => Spec.mk (f.val a.val).val a.canon
+  | Canon.super => Spec.mk (f.val a.val).val a.canon
 
 def zero1 := Spec.mk Z.zero Canon.granted
 
@@ -117,18 +173,38 @@ match z with
 def PO(z:Z):Z:=
 match z with
 | Z.zero => z
-| Z.prev zz => Z.prev (NO zz)
-| Z.next zz => NO zz
+| Z.prev zz => Z.prev (PO zz)
+| Z.next zz => PO zz
 def nextOnly(z:Z):Spec Z := Spec.mk (NO z) Canon.super
 def prevOnly(z:Z):Spec Z := Spec.mk (PO z) Canon.super
+def sumImp(z1 z2: Z):Z:=
+match z1, z2 with
+| Z.zero, x => x
+| x, Z.zero => x
+| Z.next x1, Z.prev x2 => sumImp x1 x2
+| Z.prev x1, Z.next x2 => sumImp x1 x2
+| Z.next x1, Z.next _ => Z.next (sumImp x1 z2)
+| Z.prev x1, Z.prev _ => Z.prev (sumImp x1 z2)
+def norm(z:Z):Spec Z := Spec.mk (sumImp (PO z) (NO z)) Canon.super
+def sum(z1 z2:Z):Spec Z := Spec.mk (sumImp z1 z2) Canon.granted
 
 #eval zero1
 #eval zero2
 
-#eval ins.bind zero1 increm
-#eval ins.bind zero1 incremCl
+#eval bindImp zero1 increm
+#eval bindImp zero1 incremCl
 
-#eval ins.bind zero1 nextOnly
-#eval ins.bind zero2 nextOnly
+#eval bindImp zero1 nextOnly
+#eval bindImp zero2 nextOnly
 
-#eval ins.bind (ins.bind zero2 increm) prevOnly
+#eval bindImp (bindImp zero2 increm) prevOnly
+
+#eval apply zero1 (bindImp zero1 (fun z:Z => pureImp (sum z)))
+#eval apply zero1 (bindImp zero2 (fun z:Z => pureImp (sum z)))
+#eval apply zero2 (bindImp zero1 (fun z:Z => pureImp (sum z)))
+#eval apply zero2 (bindImp zero2 (fun z:Z => pureImp (sum z)))
+
+#eval apply zero1 (bindImp (bindImp zero2 norm) (fun z:Z => mon.pure (sum z)))
+
+#eval bindImp (bindImp zero2 norm) incremCl
+#eval bindImp (bindImp zero2 norm) increm
