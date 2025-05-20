@@ -270,3 +270,41 @@ def ICut:SeqInf := extend ((cut 5) I)
 #eval ICut 2
 #eval I 20
 #eval ICut 20
+
+--instance jkl(N: ℕ): AddCommMonoid (SeqFin N →ₗ[ℤ] SeqFin N) :=
+--{
+--  add(l1 l2: (SeqFin N →ₗ[ℤ] SeqFin N)):(SeqFin N →ₗ[ℤ] SeqFin N):=
+--  {
+--    toFun(s: SeqFin N):SeqFin N := (l1 s) + (l2 s)
+--    map_add' := by
+--      intro x y
+--      have eq1: l1 (x+y)=l1 x + l1 y := by
+--        aesop
+--      have eq2: l2 (x+y)=l2 x + l2 y := by
+--        aesop
+--      rw [eq1, eq2]
+--      generalize replA: l1 x = A
+--      generalize replB: l1 y = B
+--      generalize replC: l2 x = C
+--      generalize replD: l2 y = D
+--      clear replA replB replC replD eq1 eq2 l1 l2
+--      module
+--    map_smul' := by
+--      intro m x
+--      have eq1:l1 (m • x) = m • (l1 x) := by
+--        aesop
+--      have eq2:l2 (m • x) = m • (l2 x) := by
+--        aesop
+--      have eq3:(RingHom.id ℤ) m • (l1 x + l2 x) = m • (l1 x) + m • (l2 x) := by
+--        aesop
+--      rw [eq1, eq2, eq3]
+--  }
+--  add_comm := by
+--    sorry
+--  add_assoc := by
+--    sorry
+--  zero_add := by
+--    sorry
+--  add_zero := by
+--    sorry
+--}
