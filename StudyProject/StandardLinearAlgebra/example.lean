@@ -12,6 +12,8 @@ import Mathlib.LinearAlgebra.TensorProduct.Basic
 import Mathlib.Algebra.Module.Submodule.Basic
 import Mathlib.Algebra.Module.Submodule.Bilinear
 import Mathlib.LinearAlgebra.Basis.Basic
+import Mathlib.LinearAlgebra.BilinearForm.Basic
+import Mathlib.Data.Matrix.Kronecker
 
 def SeqInf:Type := ℕ → ℤ
 
@@ -479,7 +481,6 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
             simp [HSMul.hSMul]
             simp [SMul.smul]
             simp [Finsupp.sum]
-            intro A
             sorry
           )
           (by
@@ -490,3 +491,6 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
             simp [Set.range]
             sorry
           )
+
+#check LinearMap.toMatrix
+#check Matrix.toLin
