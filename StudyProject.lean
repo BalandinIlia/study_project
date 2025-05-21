@@ -18,6 +18,8 @@ import StudyProject.StandardLinearAlgebra.moduleInfinite
 import StudyProject.StandardLinearAlgebra.linearMaps
 import StudyProject.StandardLinearAlgebra.submodule
 import StudyProject.StandardLinearAlgebra.basis
-import StudyProject.StandardLinearAlgebra.example
+import StudyProject.StandardLinearAlgebra.matrix
+import StudyProject.StandardLinearAlgebra.tensorProduct
+import StudyProject.StandardLinearAlgebra.spaceOfLinearMaps
 import StudyProject.Experiment1
 import StudyProject.ExperimentMonad

@@ -137,35 +137,3 @@ instance jkl(N: ℕ): AddCommMonoid (SeqFin N →ₗ[ℤ] SeqFin N) :=
     simp [Add.add]
     ring
 }
-
-open TensorProduct
-
-def pair:Type:=(SeqFin 2) ⊗[ℤ] (SeqFin 2)
-#synth Module ℤ ((SeqFin 2) ⊗[ℤ] (SeqFin 2))
-#synth CommSemiring ℤ
-#check instModule
-#check @instModule
-#check @instModule ℤ Int.instCommSemiring (SeqFin 2) (SeqFin 2)
-#synth AddCommMonoid (SeqFin 2)
-#synth Module ℤ (SeqFin 2)
-#check @instModule ℤ Int.instCommSemiring (SeqFin 2) (SeqFin 2) (GroupFinite 2) (GroupFinite 2) (ModuleFinite 2) (ModuleFinite 2)
-
-noncomputable
-def resT:=@instModule ℤ Int.instCommSemiring (SeqFin 2) (SeqFin 2) (GroupFinite 2) (GroupFinite 2) (ModuleFinite 2) (ModuleFinite 2)
-#check resT
-#check resT.smul
-
-def simp:Type:=ℤ ⊗[ℤ] ℤ
-
-#check LinearMap.toMatrix
-#check Matrix.toLin
-
-#check LinearMap.toMatrix (rl 5) (rl 5) (multLin 5 (fun n:Fin 5 => n))
-noncomputable
-def mat:=LinearMap.toMatrix (rl 5) (rl 5) (multLin 5 (fun n:Fin 5 => n))
-#check mat
-#check mat 1 1
-
-#check Matrix.toLin (rl 3) (rl 3)
-noncomputable
-def op := Matrix.toLin (rl 3) (rl 3) !![1, 2, 1; 1, 2, 1; 1, 2, 1]
