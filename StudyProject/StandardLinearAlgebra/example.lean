@@ -18,6 +18,7 @@ import StudyProject.StandardLinearAlgebra.definitions
 import StudyProject.StandardLinearAlgebra.moduleFinite
 import StudyProject.StandardLinearAlgebra.moduleInfinite
 import StudyProject.StandardLinearAlgebra.linearMaps
+import StudyProject.StandardLinearAlgebra.basis
 
 def Z(n:ℕ):ℤ:=n
 
@@ -155,103 +156,6 @@ def resT:=@instModule ℤ Int.instCommSemiring (SeqFin 2) (SeqFin 2) (GroupFinit
 #check resT.smul
 
 def simp:Type:=ℤ ⊗[ℤ] ℤ
-
-def sumZero(N: ℕ)(seq: SeqFin N) := (∑ i:Fin N, seq i) = 0
-
-def f(N: ℕ): Submodule ℤ (SeqFin N) :=
-{
-  carrier := {seq: SeqFin N | sumZero N seq}
-  add_mem' := by
-    intro a b
-    intro A B
-    simp at A
-    simp at B
-    simp
-    simp [sumZero] at A B
-    simp [sumZero]
-    simp [HAdd.hAdd]
-    simp [Add.add]
-    have eq: ∑ x, (a x + b x) = ∑ x, a x + ∑ x, b x := by
-      clear A B
-      simp [SeqFin] at a b
-      apply Finset.sum_add_distrib
-    rw [eq]
-    rw [A, B]
-    simp
-  zero_mem' := by
-    simp [sumZero]
-    simp [OfNat.ofNat]
-    simp [Zero.zero]
-  smul_mem' := by
-    intro c x
-    simp
-    intro CX
-    simp [sumZero] at CX
-    simp [sumZero]
-    simp [HSMul.hSMul]
-    simp [SMul.smul]
-    have eq: ∑ i, x i * c = c * ∑ i, x i := by
-      simp [Finset.mul_sum]
-      apply Finset.sum_congr
-      simp
-      intro i
-      intro I
-      generalize repl:x i = XI
-      simp [Int.mul_comm]
-    rw [eq]
-    rw [CX]
-    simp
-}
-
-#check Basis
-#check @Basis.mk
-#synth Semiring ℤ
-noncomputable
-def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
-@Basis.mk (Fin N)
-          ℤ
-          (SeqFin N)
-          Int.instSemiring
-          (GroupFinite N)
-          (ModuleFinite N)
-          (fun i:Fin N => (fun x: Fin N => if(x==i) then 1 else 0))
-          (by
-            simp [LinearIndependent]
-            simp [Finsupp.linearCombination]
-            simp [Function.Injective]
-            intro a₁ a₂
-            simp [HSMul.hSMul]
-            simp [SMul.smul]
-            simp [Finsupp.sum]
-            intro A
-            rw [Finset.sum] at A
-            rw [Finset.sum] at A
-            generalize s1:(∑ x ∈ a₁.support, fun n => if n = x then a₁ x else 0) = Seq1
-            simp [SeqFin] at A
-            #check congr_fun
-            #check congr_fun A
-            let AA := congr_fun A
-            #check congr_arg
-            simp at AA
-            have eq: ∀a:Fin N →₀ ℤ,
-                     ∀k:Fin N,
-                     a k = (∑ x ∈ a.support, fun n => if n = x then a x else 0) k := by
-                     simp
-                     aesop
-            apply Finsupp.ext
-            intro aaa
-            rw [eq a₁]
-            rw [eq a₂]
-            apply AA aaa
-          )
-          (by
-            simp [LE.le]
-            intro x
-            simp [Submodule.span]
-            intro p
-            simp [Set.range]
-            sorry
-          )
 
 #check LinearMap.toMatrix
 #check Matrix.toLin
