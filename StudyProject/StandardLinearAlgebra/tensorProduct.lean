@@ -38,3 +38,9 @@ def resT:=@instModule ℤ Int.instCommSemiring (SeqFin 2) (SeqFin 2) (GroupFinit
 #check resT.smul
 
 def simp:Type:=ℤ ⊗[ℤ] ℤ
+
+noncomputable
+def hj: Module ℤ ((SeqFin 2) ⊗[ℤ] (SeqFin 2)) := inferInstance
+#check hj
+#check hj.add_smul
+#check hj.one_smul
