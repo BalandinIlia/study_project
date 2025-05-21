@@ -481,6 +481,7 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
             simp [HSMul.hSMul]
             simp [SMul.smul]
             simp [Finsupp.sum]
+            intro A
             sorry
           )
           (by
@@ -494,3 +495,38 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
 
 #check LinearMap.toMatrix
 #check Matrix.toLin
+
+def mult(N: ℕ)(m: SeqFin N): SeqFin N →ₗ[ℤ] SeqFin N :=
+{
+  toFun: SeqFin N → SeqFin N
+  | s1 => (fun n:Fin N => (s1 n)*(m n))
+  map_add' := by
+    intro x y
+    simp
+    funext n
+    simp [HAdd.hAdd]
+    simp [Add.add]
+    generalize repl1: x n = XN
+    generalize repl2: y n = YN
+    generalize repl3: m n = MN
+    ring
+  map_smul' := by
+    intro x
+    simp
+    intro s
+    funext n
+    simp [HSMul.hSMul]
+    simp [SMul.smul]
+    generalize repl1: m n = MN
+    generalize repl2: s n = SN
+    ring
+}
+
+#check LinearMap.toMatrix (rl 5) (rl 5) (mult 5 (fun n:Fin 5 => n))
+noncomputable
+def mat:=LinearMap.toMatrix (rl 5) (rl 5) (mult 5 (fun n:Fin 5 => n))
+#check mat
+#check mat 1 1
+
+#check Matrix.toLin (rl 3) (rl 3)
+def op := Matrix.toLin (rl 3) (rl 3) !![![1, 2, 1], ![1, 2, 1], ![1, 2, 1]]
