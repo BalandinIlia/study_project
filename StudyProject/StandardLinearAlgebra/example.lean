@@ -472,7 +472,7 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
           Int.instSemiring
           (GroupFinite N)
           (ModuleFinite N)
-          (fun i:Fin N => (fun x: Fin N => if(x=i) then 1 else 0))
+          (fun i:Fin N => (fun x: Fin N => if(x==i) then 1 else 0))
           (by
             simp [LinearIndependent]
             simp [Finsupp.linearCombination]
@@ -482,7 +482,25 @@ def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
             simp [SMul.smul]
             simp [Finsupp.sum]
             intro A
-            sorry
+            rw [Finset.sum] at A
+            rw [Finset.sum] at A
+            generalize s1:(∑ x ∈ a₁.support, fun n => if n = x then a₁ x else 0) = Seq1
+            simp [SeqFin] at A
+            #check congr_fun
+            #check congr_fun A
+            let AA := congr_fun A
+            #check congr_arg
+            simp at AA
+            have eq: ∀a:Fin N →₀ ℤ,
+                     ∀k:Fin N,
+                     a k = (∑ x ∈ a.support, fun n => if n = x then a x else 0) k := by
+                     simp
+                     aesop
+            apply Finsupp.ext
+            intro aaa
+            rw [eq a₁]
+            rw [eq a₂]
+            apply AA aaa
           )
           (by
             simp [LE.le]
@@ -529,4 +547,5 @@ def mat:=LinearMap.toMatrix (rl 5) (rl 5) (mult 5 (fun n:Fin 5 => n))
 #check mat 1 1
 
 #check Matrix.toLin (rl 3) (rl 3)
-def op := Matrix.toLin (rl 3) (rl 3) !![![1, 2, 1], ![1, 2, 1], ![1, 2, 1]]
+noncomputable
+def op := Matrix.toLin (rl 3) (rl 3) !![1, 2, 1; 1, 2, 1; 1, 2, 1]
