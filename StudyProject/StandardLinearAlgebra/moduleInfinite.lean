@@ -1,4 +1,6 @@
 import Mathlib.Data.Int.Basic
+import Mathlib.Algebra.Ring.Basic
+import Mathlib.LinearAlgebra.Basis.Basic
 import Mathlib.Algebra.Module.Defs
 import StudyProject.StandardLinearAlgebra.definitions
 

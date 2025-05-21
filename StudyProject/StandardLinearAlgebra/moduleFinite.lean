@@ -1,74 +1,62 @@
 import Mathlib.Data.Int.Basic
 import Mathlib.Algebra.Ring.Basic
-import Mathlib.Algebra.Field.Basic
-import Mathlib.LinearAlgebra.Basis.VectorSpace
-import Mathlib.LinearAlgebra.Basis.Submodule
 import Mathlib.LinearAlgebra.Basis.Basic
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Data.Fin.Basic
-import Mathlib.LinearAlgebra.DirectSum.Basis
-import Mathlib.LinearAlgebra.Matrix.Basis
-import Mathlib.LinearAlgebra.TensorProduct.Basic
-import Mathlib.Algebra.Module.Submodule.Basic
-import Mathlib.Algebra.Module.Submodule.Bilinear
-import Mathlib.LinearAlgebra.Basis.Basic
-import Mathlib.LinearAlgebra.BilinearForm.Basic
-import Mathlib.Data.Matrix.Kronecker
 import StudyProject.StandardLinearAlgebra.definitions
 
+-- Here we do "mass definition" of instances.
+-- There is a countable set of types SeqFin, and we define
+-- AddCommMonoid instance for each type.
 instance GroupFinite(N: ℕ):AddCommMonoid (SeqFin N) :=
 {
   add: (SeqFin N) → (SeqFin N) → (SeqFin N)
   | f1, f2 => fun n:(Fin N) => (f1 n) + (f2 n)
+  add_comm := by
+    simp [HAdd.hAdd]
+    intro a b
+    funext n
+    apply Int.add_comm
   add_assoc := by
     simp [HAdd.hAdd]
-    simp [Add.add]
     intro a b c
     funext n
-    omega
+    apply Int.add_assoc
   zero := fun n:Fin N => 0
   zero_add := by
     simp [HAdd.hAdd]
-    simp [Add.add]
     intro a
     funext n
-    simp [OfNat.ofNat]
+    rw [OfNat.ofNat]
+    simp [Zero.toOfNat0]
+    apply Int.zero_add
   add_zero := by
     simp [HAdd.hAdd]
-    simp [Add.add]
     intro a
     funext n
-    simp [OfNat.ofNat]
-  add_comm := by
-    simp [HAdd.hAdd]
-    simp [Add.add]
-    intro a b
-    funext n
-    omega
+    rw [OfNat.ofNat]
+    simp [Zero.toOfNat0]
+    apply Int.add_zero
 
   nsmul: ℕ → (SeqFin N) → (SeqFin N)
   | m, f => fun n:Fin N => (f n) * m
   nsmul_zero := by
     simp
-    intro x
-    funext n
-    simp [OfNat.ofNat]
+    rw [OfNat.ofNat]
+    rw [OfNat.ofNat]
+    simp [Zero.toOfNat0]
   nsmul_succ := by
     simp
+    simp [HAdd.hAdd]
     intro n x
     funext m
-    simp [Nat.cast]
-    simp [HAdd.hAdd]
+    generalize repl1:((↑n):ℤ)=M
+    generalize repl2:(x m)=G
     simp [Add.add]
-    generalize repl: x m = A
-    simp [OfNat.ofNat]
-    simp [One.one]
-    simp [NatCast.natCast]
-    simp [Nat.cast]
-    rw [Int.mul_add]
-    omega
+    simp [Int.mul_add G M 1]
 }
 
+-- The same "mass definition" of instances.
 instance ModuleFinite(N: ℕ): Module ℤ (SeqFin N) :=
 {
   smul(z: ℤ)(f: SeqFin N) := fun n:Fin N => (f n) * z
