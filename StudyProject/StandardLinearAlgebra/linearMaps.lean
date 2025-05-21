@@ -117,3 +117,16 @@ def multLin(N: ℕ)(m: SeqFin N): SeqFin N →ₗ[ℤ] SeqFin N :=
     generalize repl2: s n = SN
     ring
 }
+
+def transf:=multLin 100 (cut 100 I)
+
+#check transf
+
+def tr:=transf (cut 100 I)
+
+#check tr
+
+#eval tr 0
+#eval tr 1
+#eval tr 10
+#eval tr 90
