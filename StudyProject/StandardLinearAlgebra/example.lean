@@ -11,6 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Basis
 import Mathlib.LinearAlgebra.TensorProduct.Basic
 import Mathlib.Algebra.Module.Submodule.Basic
 import Mathlib.Algebra.Module.Submodule.Bilinear
+import Mathlib.LinearAlgebra.Basis.Basic
 
 def SeqInf:Type := ℕ → ℤ
 
@@ -457,3 +458,35 @@ def f(N: ℕ): Submodule ℤ (SeqFin N) :=
     rw [CX]
     simp
 }
+
+#check Basis
+#check @Basis.mk
+#synth Semiring ℤ
+noncomputable
+def rl(N: ℕ):Basis (Fin N) ℤ (SeqFin N) :=
+@Basis.mk (Fin N)
+          ℤ
+          (SeqFin N)
+          Int.instSemiring
+          (GroupFinite N)
+          (ModuleFinite N)
+          (fun i:Fin N => (fun x: Fin N => if(x=i) then 1 else 0))
+          (by
+            simp [LinearIndependent]
+            simp [Finsupp.linearCombination]
+            simp [Function.Injective]
+            intro a₁ a₂
+            simp [HSMul.hSMul]
+            simp [SMul.smul]
+            simp [Finsupp.sum]
+            intro A
+            sorry
+          )
+          (by
+            simp [LE.le]
+            intro x
+            simp [Submodule.span]
+            intro p
+            simp [Set.range]
+            sorry
+          )
