@@ -12,6 +12,10 @@ import StudyProject.MyAbstractAlgebra.Constructions.RingDirectProduct
 import StudyProject.MyAbstractAlgebra.Constructions.PolinomAboveRing
 import StudyProject.MyLinearAlgebra.LinearSpace
 import StudyProject.StandardAbstractAlgebra.exampleStandardRing
+import StudyProject.StandardLinearAlgebra.definitions
+import StudyProject.StandardLinearAlgebra.moduleFinite
+import StudyProject.StandardLinearAlgebra.moduleInfinite
+import StudyProject.StandardLinearAlgebra.linearMaps
 import StudyProject.StandardLinearAlgebra.example
 import StudyProject.Experiment1
 import StudyProject.ExperimentMonad
