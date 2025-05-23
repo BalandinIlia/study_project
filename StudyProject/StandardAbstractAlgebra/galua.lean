@@ -189,6 +189,7 @@ instance ins: AddCommMonoid Elem :=
       prove x eq1 (prove y eq2 (
                                intro e1 e2
                                simp [e1, e2]
+                               clear e1 e2
                                apply bel
                                simp
                                )
