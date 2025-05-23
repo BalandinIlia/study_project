@@ -9,33 +9,14 @@ instance GroupInfinite:AddCommMonoid SeqInf :=
   add: SeqInf → SeqInf → SeqInf
   | f1, f2 => fun n:ℕ => (f1 n) + (f2 n)
   add_comm := by
-    simp [HAdd.hAdd]
-    intro a b
-    funext n
-    generalize ra:a n = A
-    generalize rb:b n = B
-    apply Int.add_comm
+    prove_by_integer_prop Int.add_comm
   add_assoc := by
-    simp [HAdd.hAdd]
-    intro a b c
-    funext n
-    generalize ra:a n = A
-    generalize rb:b n = B
-    generalize rc:c n = C
-    apply Int.add_assoc
+    prove_by_integer_prop Int.add_assoc
   zero := fun n:ℕ => 0
   zero_add := by
-    simp [HAdd.hAdd]
-    intro a
-    funext n
-    simp [OfNat.ofNat]
-    apply Int.zero_add
+    prove_by_integer_prop Int.zero_add
   add_zero := by
-    simp [HAdd.hAdd]
-    intro a
-    funext n
-    simp [OfNat.ofNat]
-    apply Int.add_zero
+    prove_by_integer_prop Int.add_zero
 
   nsmul: ℕ → SeqInf → SeqInf
   | m, f => fun n:ℕ => (f n) * m
@@ -54,7 +35,7 @@ instance GroupInfinite:AddCommMonoid SeqInf :=
     generalize rn:(↑n:ℤ) = N
     simp [Add.add]
     clear n x m rxm rn
-    simp [Int.mul_add XM N 1]
+    simp [Int.mul_add
 }
 
 instance ModuleInfinite: Module ℤ SeqInf :=

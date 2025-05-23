@@ -13,30 +13,14 @@ instance GroupFinite(N: ℕ):AddCommMonoid (SeqFin N) :=
   add: (SeqFin N) → (SeqFin N) → (SeqFin N)
   | f1, f2 => fun n:(Fin N) => (f1 n) + (f2 n)
   add_comm := by
-    simp [HAdd.hAdd]
-    intro a b
-    funext n
-    apply Int.add_comm
+    prove_by_integer_prop Int.add_comm
   add_assoc := by
-    simp [HAdd.hAdd]
-    intro a b c
-    funext n
-    apply Int.add_assoc
+    prove_by_integer_prop Int.add_assoc
   zero := fun n:Fin N => 0
   zero_add := by
-    simp [HAdd.hAdd]
-    intro a
-    funext n
-    rw [OfNat.ofNat]
-    simp [Zero.toOfNat0]
-    apply Int.zero_add
+    prove_by_integer_prop Int.zero_add
   add_zero := by
-    simp [HAdd.hAdd]
-    intro a
-    funext n
-    rw [OfNat.ofNat]
-    simp [Zero.toOfNat0]
-    apply Int.add_zero
+    prove_by_integer_prop Int.add_zero
 
   nsmul: ℕ → (SeqFin N) → (SeqFin N)
   | m, f => fun n:Fin N => (f n) * m
