@@ -173,7 +173,7 @@ instance ins: AddCommMonoid Elem :=
 {
   add(e1 e2: Elem) :=
   {
-    val := (e1.val + e2.val)%20
+    val := (e1.val + e2.val)%19
     prop := by
       generalize r1:e1.val = x
       rw [Eq.comm] at r1
@@ -253,7 +253,7 @@ instance ins: AddCommMonoid Elem :=
 
   nsmul(n: ℕ)(e: Elem):Elem:=
   {
-    val := (n:ℤ)*e.val % 100
+    val := (n:ℤ)*e.val % 19
     prop := by
       sorry
   }
