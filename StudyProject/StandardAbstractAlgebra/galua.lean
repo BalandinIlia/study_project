@@ -178,7 +178,30 @@ instance ins: AddCommMonoid Elem :=
                   )
   }
   add_assoc := by
-    sorry
+    intro a b c
+    generalize ra:a.val = x
+    generalize rb:b.val = y
+    generalize rc:c.val = z
+    have eqx:x∈universRaw:=by
+        rw [Eq.comm] at ra
+        simp [ra]
+        apply a.prop
+    have eqy:y∈universRaw:=by
+        rw [Eq.comm] at rb
+        simp [rb]
+        apply b.prop
+    have eqz:z∈universRaw:=by
+        rw [Eq.comm] at rc
+        simp [rc]
+        apply c.prop
+    simp [HAdd.hAdd]
+    rw [ra, rb, rc]
+    prove x eqx (prove y eqy (prove z eqz (
+                                          intro e1 e2 e3
+                                          simp [e1, e2, e3, Add.add]
+                                          )
+                             )
+                )
   zero :=
   {
     val := 0
