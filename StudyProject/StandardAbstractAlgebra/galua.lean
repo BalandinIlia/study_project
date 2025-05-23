@@ -4,6 +4,8 @@ import Mathlib.Algebra.Ring.Basic
 
 set_option maxHeartbeats 10000000
 
+namespace fghj
+
 macro "set_ten" na:ident start:num : command =>
 `(command|
 def $na:ident :Set ℤ :=  {$start:num,
