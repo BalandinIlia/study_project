@@ -142,36 +142,6 @@ A := by
   rw [universRaw] at belong
   rw [q,w,e,r,t,y,u,i,o,p] at belong
   simp at belong
-  sorry
-  /-cases belong
-  case inr belong => cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong =>
-                     cases belong
-                     case inl => aesop
-                     case inr belong => aesop
-  case inl belong =>
   cases belong
   case inr belong => cases belong
                      case inl => aesop
@@ -431,7 +401,36 @@ A := by
                      case inr belong =>
                      cases belong
                      case inl => aesop
-                     case inr belong => aesop-/
+                     case inr belong => aesop
+  case inl belong =>
+  cases belong
+  case inr belong => cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong =>
+                     cases belong
+                     case inl => aesop
+                     case inr belong => aesop
 
 structure Elem where
 val: ℤ
