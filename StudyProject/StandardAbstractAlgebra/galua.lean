@@ -2,9 +2,9 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Algebra.Ring.Basic
 
-set_option maxHeartbeats 10000000
+--set_option maxHeartbeats 10000000
 
-namespace fghj
+namespace MacroTraining
 
 macro "set_ten" na:ident start:num : command =>
 `(command|
@@ -28,7 +28,7 @@ theorem test_ten_th: test_ten = {8,9,10,11,12,13,14,15,16,17} := by
 def universRaw: Set ℤ :=
 {
 0,1,2,3,4,5,6,7,8,9,
-10,11,12,13,14,15,16,17,18,19
+10,11,12,13,14,15,16,17,18
 }
 #check universRaw
 #print universRaw
@@ -53,12 +53,8 @@ lemma sep(a:ℤ)(belong:a∈universRaw)(A:Prop):
 (a=16 → A) →
 (a=17 → A) →
 (a=18 → A) →
-(a=19 → A) →
 A := by
   rw [universRaw] at belong
-  cases belong
-  case inl => aesop
-  case inr belong =>
   cases belong
   case inl => aesop
   case inr belong =>
@@ -126,26 +122,7 @@ macro "prove" x:ident X:ident solCase:tactic : tactic =>
 `(tactic|
 (
   apply sep $x $X
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
-  $solCase
+  all_goals $solCase
 )
 )
 
@@ -169,8 +146,7 @@ lemma bel(z:ℤ):
   (z=15)∨
   (z=16)∨
   (z=17)∨
-  (z=18)∨
-  (z=19)
+  (z=18)
 ) → (z∈universRaw) := by
   aesop
 
