@@ -35,7 +35,7 @@ instance GroupInfinite:AddCommMonoid SeqInf :=
     generalize rn:(↑n:ℤ) = N
     simp [Add.add]
     clear n x m rxm rn
-    simp [Int.mul_add
+    simp [Int.mul_add]
 }
 
 instance ModuleInfinite: Module ℤ SeqInf :=
