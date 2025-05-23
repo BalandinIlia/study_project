@@ -2,7 +2,7 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Algebra.Ring.Basic
 
---set_option maxHeartbeats 10000000
+set_option maxHeartbeats 10000000
 
 namespace MacroTraining
 
