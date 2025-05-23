@@ -121,8 +121,26 @@ prop: val∈universRaw
 macro "prove" x:ident X:ident solCase:tactic : tactic =>
 `(tactic|
 (
-  apply sep $x $X
-  all_goals $solCase
+  apply sep $x $X;
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
+  $solCase
 )
 )
 
