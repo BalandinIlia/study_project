@@ -242,7 +242,14 @@ instance ins: AddCommMonoid Elem :=
                        aesop
                        )
   add_comm := by
-    sorry
+    intro a b
+    apply Elem.ext
+    simp [HAdd.hAdd]
+    prove a.val a.prop (prove b.val b.prop (
+                                           intro e1 e2
+                                           simp [e1, e2]                                           
+                                           )                 
+                       )
 
   nsmul(n: ℕ)(e: Elem):Elem:=
   {
