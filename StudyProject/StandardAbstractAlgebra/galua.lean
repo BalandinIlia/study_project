@@ -149,7 +149,30 @@ macro "prove" x:ident X:ident solCase:tactic : tactic =>
 )
 )
 
-axiom bel(z:ℤ):(z>-1)→(z<100)→z∈universRaw
+lemma bel(z:ℤ):
+(
+  (z=0)∨
+  (z=1)∨
+  (z=2)∨
+  (z=3)∨
+  (z=4)∨
+  (z=5)∨
+  (z=6)∨
+  (z=7)∨
+  (z=8)∨
+  (z=9)∨
+  (z=10)∨
+  (z=11)∨
+  (z=12)∨
+  (z=13)∨
+  (z=14)∨
+  (z=15)∨
+  (z=16)∨
+  (z=17)∨
+  (z=18)∨
+  (z=19)
+) → (z∈universRaw) := by
+  aesop
 
 instance ins: AddCommMonoid Elem :=
 {
@@ -172,8 +195,7 @@ instance ins: AddCommMonoid Elem :=
                                intro e1 e2
                                simp [e1, e2]
                                apply bel
-                               omega
-                               omega
+                               simp
                                )
                   )
   }
