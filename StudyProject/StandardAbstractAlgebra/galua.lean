@@ -112,6 +112,7 @@ A := by
     simp at belong
     aesop
 
+@[ext]
 structure Elem where
 val: ℤ
 prop: val∈universRaw
@@ -222,12 +223,23 @@ instance ins: AddCommMonoid Elem :=
   {
     val := 0
     prop := by
-      sorry
+      apply bel
+      simp
   }
   zero_add := by
-    sorry
+    intro a
+    apply Elem.ext
+    simp [HAdd.hAdd]
+    prove a.val a.prop (
+                       aesop
+                       )
   add_zero := by
-    sorry
+    intro a
+    apply Elem.ext
+    simp [HAdd.hAdd]
+    prove a.val a.prop (
+                       aesop
+                       )
   add_comm := by
     sorry
 
