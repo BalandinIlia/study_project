@@ -217,7 +217,7 @@ instance ins: AddCommMonoid Elem :=
     prove x eqx (prove y eqy (prove z eqz (
                                           intro e1 e2 e3;
                                           rw [e1, e2, e3]
-                                          omega
+                                          try omega
                                           )
                              )
                 )
@@ -249,7 +249,7 @@ instance ins: AddCommMonoid Elem :=
     prove a.val a.prop (prove b.val b.prop (
                                            intro e1 e2;
                                            rw [e1, e2];
-                                           omega
+                                           try omega
                                            )                 
                        )
 
