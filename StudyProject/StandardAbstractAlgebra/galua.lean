@@ -36,30 +36,33 @@ def universRaw: Set ℤ :=
 #check universRaw
 #print universRaw
 
+macro "fol" a:ident n:num A:ident: term =>
+`(term| ($a=$n → $A))
+
 -- This helper lemma works with a property dependent on
 -- a universe element a. It enables us to replace reasoning
 -- for the entire universe by reasoning for each universe
 -- element separately.
 lemma sep(a:ℤ)(belong:a∈universRaw)(A:Prop):
-(a=0 → A) →
-(a=1 → A) →
-(a=2 → A) →
-(a=3 → A) →
-(a=4 → A) →
-(a=5 → A) →
-(a=6 → A) →
-(a=7 → A) →
-(a=8 → A) →
-(a=9 → A) →
-(a=10 → A) →
-(a=11 → A) →
-(a=12 → A) →
-(a=13 → A) →
-(a=14 → A) →
-(a=15 → A) →
-(a=16 → A) →
-(a=17 → A) →
-(a=18 → A) →
+(fol a 0 A) →
+(fol a 1 A) →
+(fol a 2 A) →
+(fol a 3 A) →
+(fol a 4 A) →
+(fol a 5 A) →
+(fol a 6 A) →
+(fol a 7 A) →
+(fol a 8 A) →
+(fol a 9 A) →
+(fol a 10 A) →
+(fol a 11 A) →
+(fol a 12 A) →
+(fol a 13 A) →
+(fol a 14 A) →
+(fol a 15 A) →
+(fol a 16 A) →
+(fol a 17 A) →
+(fol a 18 A) →
 A := by
   rw [universRaw] at belong
   cases belong
