@@ -123,25 +123,7 @@ macro "prove" x:ident X:ident solCase:tactic : tactic =>
 `(tactic|
 (
   apply sep $x $X;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase;
-  $solCase
+  all_goals ($solCase;)
 )
 )
 
