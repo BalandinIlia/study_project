@@ -197,8 +197,9 @@ instance ins: AddCommMonoid Elem :=
     simp [HAdd.hAdd]
     rw [ra, rb, rc]
     prove x eqx (prove y eqy (prove z eqz (
-                                          trace_state;
-                                          omega
+                                          intro c1 c2 c3;
+                                          simp [c1, c2, c3];
+                                          try aesop
                                           )
                              )
                 )
@@ -228,7 +229,9 @@ instance ins: AddCommMonoid Elem :=
     apply Elem.ext
     simp [HAdd.hAdd]
     prove a.val a.prop (prove b.val b.prop (
-                                           omega
+                                           intro c1 c2;
+                                           simp [c1, c2];
+                                           try aesop
                                            )                 
                        )
 
