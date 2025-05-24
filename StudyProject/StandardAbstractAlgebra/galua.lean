@@ -2,10 +2,12 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Algebra.Ring.Basic
 
+-- Increase computational limit to enable all macros run to the end.
 set_option maxHeartbeats 10000000
 
 namespace MacroTraining
 
+-- Set of ten consequetive numbers starting from given number
 macro "set_ten" na:ident start:num : command =>
 `(command|
 def $na:ident :Set ℤ :=  {$start:num,
@@ -25,6 +27,7 @@ theorem test_ten_th: test_ten = {8,9,10,11,12,13,14,15,16,17} := by
   rw [test_ten]
   simp
 
+-- Set of integers we will be operating at
 def universRaw: Set ℤ :=
 {
 0,1,2,3,4,5,6,7,8,9,
@@ -33,6 +36,10 @@ def universRaw: Set ℤ :=
 #check universRaw
 #print universRaw
 
+-- This helper lemma works with a property dependent on
+-- a universe element a. It enables us to replace reasoning
+-- for the entire universe by reasoning for each universe
+-- element separately.
 lemma sep(a:ℤ)(belong:a∈universRaw)(A:Prop):
 (a=0 → A) →
 (a=1 → A) →
@@ -112,13 +119,17 @@ A := by
     simp at belong
     aesop
 
+-- formal universe element structure
 @[ext]
 structure Elem where
 val: ℤ
 prop: val∈universRaw
 
--- Solces goal like x∈inversRaw → Prop
--- solCase solces the goal for each particular x value
+-- This macro solves a goal which have form x∈inversRaw → X:Prop.
+-- For this the macro divides the goal into subgoals:
+--         x=particular_value -> X
+-- solCase solves the subgoal (x=particular_value -> X)
+-- for each particular x value
 macro "prove" x:ident X:ident solCase:tactic : tactic =>
 `(tactic|
 (
@@ -127,6 +138,8 @@ macro "prove" x:ident X:ident solCase:tactic : tactic =>
 )
 )
 
+-- Helper lemma: helps to prove that given number belongs to
+-- the universe
 lemma bel(z:ℤ):
 (
   (z=0)∨
@@ -199,6 +212,7 @@ instance ins: AddCommMonoid Elem :=
     prove x eqx (prove y eqy (prove z eqz (
                                           intro c1 c2 c3;
                                           simp [c1, c2, c3];
+                                          -- We do "try aesop", because aesop is necessary for some subgoals and not necessary for others.
                                           try aesop
                                           )
                              )
@@ -232,7 +246,7 @@ instance ins: AddCommMonoid Elem :=
                                            intro c1 c2;
                                            simp [c1, c2];
                                            try aesop
-                                           )                 
+                                           )
                        )
 
   nsmul(n: ℕ)(e: Elem):Elem:=
