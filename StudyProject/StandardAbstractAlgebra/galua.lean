@@ -215,6 +215,7 @@ instance ins: AddCommMonoid Elem :=
     simp [HAdd.hAdd]
     rw [ra, rb, rc]
     prove x eqx (prove y eqy (prove z eqz (
+                                          trace_state;
                                           omega
                                           )
                              )
