@@ -12,7 +12,7 @@ import StudyProject.MyAbstractAlgebra.Constructions.RingDirectProduct
 import StudyProject.MyAbstractAlgebra.Constructions.PolinomAboveRing
 import StudyProject.MyLinearAlgebra.LinearSpace
 import StudyProject.StandardAbstractAlgebra.exampleStandardRing
-import StudyProject.StandardAbstractAlgebra.galua
+--import StudyProject.StandardAbstractAlgebra.galua
 import StudyProject.StandardLinearAlgebra.definitions
 import StudyProject.StandardLinearAlgebra.moduleFinite
 import StudyProject.StandardLinearAlgebra.moduleInfinite
@@ -24,3 +24,4 @@ import StudyProject.StandardLinearAlgebra.tensorProduct
 import StudyProject.StandardLinearAlgebra.spaceOfLinearMaps
 import StudyProject.Experiment1
 import StudyProject.ExperimentMonad
+import StudyProject.experimentTen3Spaces
