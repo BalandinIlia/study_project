@@ -296,7 +296,8 @@ def ex1:triple := TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (
 noncomputable
 def ex2:triple := TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 10 20) (Coup.mk 30 40)) (Coup.mk 50 60)
 
-theorem eqqq:final 1 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 2 1) (Coup.mk 3 4)) (Coup.mk 5 6) := by
+-- first test theorem to make sure that final works as expected
+theorem test1:final 1 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 2 1) (Coup.mk 3 4)) (Coup.mk 5 6) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
@@ -304,7 +305,7 @@ theorem eqqq:final 1 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (
   simp [core]
   simp [swap]
 
-theorem eqrqq:final 2 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) := by
+theorem test2:final 2 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
@@ -312,7 +313,7 @@ theorem eqrqq:final 2 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ 
   simp [core]
   simp [swap]
 
-theorem edfdf:final 2 swap (ex1+ex2) =
+theorem test3:final 2 swap (ex1+ex2) =
             TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) +
             TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 10 20) (Coup.mk 40 30)) (Coup.mk 50 60) := by
   have eq: final 2 swap (ex1+ex2) = (final 2 swap ex1) + (final 2 swap ex2) := by
@@ -327,7 +328,7 @@ theorem edfdf:final 2 swap (ex1+ex2) =
   simp [core]
   simp [swap]
 
-theorem eqrfqq:final 3 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 3 4)) (Coup.mk 6 5) := by
+theorem test4:final 3 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 3 4)) (Coup.mk 6 5) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
