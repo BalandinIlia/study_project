@@ -16,6 +16,8 @@ import StudyProject.StandardLinearAlgebra.basis
 
 open TensorProduct
 
+-- Part 1: Coup definition, module over coup
+
 -- A pair of integers
 @[ext]
 structure Coup where
@@ -61,27 +63,122 @@ instance mod: Module ℤ Coup :=
   zero_smul := by pr
 }
 
+-- Part 2: triple and common map over triple definition
+
 -- Here we start the purpose of this file
 -- triple is a "Tensor cube" of Coup
 @[reducible]
 def triple:Type := (Coup ⊗[ℤ] Coup) ⊗[ℤ] Coup
-
--- helper macro
-macro "proveTP":tactic =>
-`(tactic|(
-  try apply TensorProduct.tmul_add
-  try apply TensorProduct.tmul_smul
-  try apply TensorProduct.smul_tmul
-  try apply TensorProduct.smul_tmul'
-  try apply TensorProduct.add_tmul
-))
 
 -- FUNCTION PURPOSE
 -- This function is a core of the transformation.
 -- In fact this function defines transformation of triple instances.
 -- However it defines it explicitly only for pure states: c₁⊗c₂⊗c₃.
 -- This funcition is later lifted to define transformation for entangled states.
---
+-- CF means core function
+structure CF where
+func: Coup → Coup → Coup → triple
+ps1: ∀a b c d: Coup, func (a+b) c d = (func a c d) + (func b c d)
+ps2: ∀a b c d: Coup, func a (b+c) d = (func a b d) + (func a c d)
+ps3: ∀a b c d: Coup, func a b (c+d) = (func a b c) + (func a b d)
+pm1: ∀m:ℤ, ∀a b c: Coup, func (m • a) b c = m • (func a b c)
+pm2: ∀m:ℤ, ∀a b c: Coup, func a (m • b) c = m • (func a b c)
+pm3: ∀m:ℤ, ∀a b c: Coup, func a b (m • c) = m • (func a b c)
+
+-- Here we start transforming core into linear map to linear map...
+-- This is the first step: we eliminate the first parameter of core
+noncomputable
+def coreLin1(cf: CF)
+            (x y: Coup):
+            Coup →ₗ[ℤ] triple :=
+{
+  toFun(z:Coup) := cf.func x y z
+  map_add' := by
+    intro a b
+    apply cf.ps3
+  map_smul' := by
+    intro m a
+    apply cf.pm3
+}
+
+-- Here we continue transforming core into linea map.
+-- Here we eliminate the second parameter of core.
+noncomputable
+def coreLin2(cf: CF)
+            (x: Coup):
+            Coup →ₗ[ℤ] (Coup →ₗ[ℤ] triple) :=
+{
+  toFun(y:Coup) := coreLin1 cf x y
+  map_add' := by
+    intro x1 y1
+    ext g
+    simp [coreLin1]
+    apply cf.ps2
+  map_smul' := by
+    intro x1 y1
+    ext g
+    simp [coreLin1]
+    apply cf.pm2
+}
+
+-- Here we transformed core into linear map
+-- However this map is: core + some its properties proven
+-- In other words this map still works only with c₁⊗c₂⊗c₃ and can't work with arbitrary triple
+noncomputable
+def coreLin3(cf: CF):
+            Coup →ₗ[ℤ] (
+                      Coup →ₗ[ℤ] (
+                                 Coup →ₗ[ℤ] triple
+                                 )
+                      ) :=
+{
+  toFun(c:Coup) := coreLin2 cf c
+  map_add' := by
+    intro x1 y1
+    ext g
+    simp [coreLin1, coreLin2]
+    apply cf.ps1
+  map_smul' := by
+    intro x1 y1
+    ext g
+    simp [coreLin1, coreLin2]
+    apply cf.pm1
+}
+
+-- Here we start lifting core to space of all triples.
+-- Here we lift it from acting on c₁⊗c₂⊗c₃ to acting on c₁₂⊗c₃
+noncomputable
+def coreLift1(cf: CF): (Coup ⊗[ℤ] Coup) →ₗ[ℤ] (Coup →ₗ[ℤ] triple) :=
+TensorProduct.lift (coreLin3 cf)
+
+-- Final: Core lifted to c₁₂₃
+noncomputable
+def final(cf: CF): triple →ₗ[ℤ] triple := TensorProduct.lift (coreLift1 cf)
+
+-- Part 3: defining particular example terms
+
+-- Just a helper lemma. It allows to divide an arbitrary case into:
+-- n=1
+-- n=2
+-- n=3
+-- other
+lemma help(n:ℕ)(A:Prop):
+((n=1)→A) →
+((n=2)→A) →
+((n=3)→A) →
+(¬(n=1)→¬(n=2)→¬(n=3)→A) →
+A := by
+  intro c1 c2 c3 cn
+  cases n
+  case zero=>aesop
+  case succ m => cases m
+                 case zero => aesop
+                 case succ k => cases k
+                                case zero => aesop
+                                case succ r => cases r
+                                               case zero => aesop
+                                               case succ f => aesop
+
 -- HOW THIS PARTICULAR INSTANCE WORKS
 -- This particular instance takes the following parameters:
 -- n: number of element unit transformation should be applied to (c₁ or c₂ or c₃)
@@ -108,68 +205,6 @@ else if (n=3) then TensorProduct.tmul ℤ
 else TensorProduct.tmul ℤ
                         (TensorProduct.tmul ℤ x y)
                         z
-
--- Just a helper lemma. It allows to divide an arbitrary case into:
--- n=1
--- n=2
--- n=3
--- other
-lemma help(n:ℕ)(A:Prop):
-((n=1)→A) →
-((n=2)→A) →
-((n=3)→A) →
-(¬(n=1)→¬(n=2)→¬(n=3)→A) →
-A := by
-  intro c1 c2 c3 cn
-  cases n
-  case zero=>aesop
-  case succ m => cases m
-                 case zero => aesop
-                 case succ k => cases k
-                                case zero => aesop
-                                case succ r => cases r
-                                               case zero => aesop
-                                               case succ f => aesop
-
--- Here we start transforming core into linear map to linear map...
--- This is the first step: we eliminate the first parameter of core
-noncomputable
-def coreLin1(n: ℕ)
-            (sw: Coup →ₗ[ℤ] Coup)
-            (x y: Coup):
-            Coup →ₗ[ℤ] triple :=
-{
-  toFun(z:Coup) := core n sw x y z
-  map_add' := by
-    simp [core]
-    apply help n
-    {
-      intro eq
-      simp [eq]
-      intro x1 y1
-      proveTP
-    }
-    {
-      intro eq
-      simp [eq]
-      intro x1 y1
-      proveTP
-    }
-    {
-      intro eq
-      simp [eq]
-      intro x1 y1
-      proveTP
-    }
-    {
-      intro eq1 eq2 eq3
-      simp [eq1, eq2, eq3]
-      intro x1 y1
-      proveTP
-    }
-  map_smul' := by
-    simp [core]
-}
 
 macro "unfoldTensorPrSum":tactic =>
 `(tactic|(
@@ -213,72 +248,41 @@ macro "extractSc":tactic =>
   try apply TensorProduct.smul_tmul
 ))
 
--- Here we continue transforming core into linea map.
--- Here we eliminate the second parameter of core.
 noncomputable
-def coreLin2(n: ℕ)
-            (sw: Coup →ₗ[ℤ] Coup)
-            (x: Coup):
-            Coup →ₗ[ℤ] (Coup →ₗ[ℤ] triple) :=
+def coreFunc(n: ℕ)(tr: Coup →ₗ[ℤ] Coup): CF :=
 {
-  toFun(y:Coup) := coreLin1 n sw x y
-  map_add' := by
-    intro x1 y1
-    ext g
-    simp [coreLin1]
+  func := core n tr
+  ps1 := by
     simp [core]
+    intros
     unfoldTensorPrSum
     apply help n
     all_goals aesop
-  map_smul' := by
-    intro x1 y1
-    ext g
-    simp [coreLin1]
+  ps2 := by
     simp [core]
-    apply help n
-    all_goals aesop
-}
-
--- Here we transformed code into linear map
--- However this map is: core + some its properties proven
--- In other words this map still works only with c₁⊗c₂⊗c₃ and can't work with arbitrary triple
-noncomputable
-def coreLin3(n: ℕ)
-            (sw: Coup →ₗ[ℤ] Coup):
-            Coup →ₗ[ℤ] (
-                      Coup →ₗ[ℤ] (
-                                 Coup →ₗ[ℤ] triple
-                                 )
-                      ) :=
-{
-  toFun(c:Coup) := coreLin2 n sw c
-  map_add' := by
-    intro x1 y1
-    ext g
-    simp [coreLin1, coreLin2]
-    simp [core]
+    intros
     unfoldTensorPrSum
     apply help n
     all_goals aesop
-  map_smul' := by
-    intro x1 y1
-    ext g
-    simp [coreLin1, coreLin2]
+  ps3 := by
     simp [core]
+    intros
+    unfoldTensorPrSum
     apply help n
     all_goals aesop
+  pm1 := by
+    simp [core]
+    intros
+    apply help n
+    all_goals aesop
+  pm2 := by
+    simp [core]
+    intros
+    apply help n
+    all_goals aesop
+  pm3 := by
+    simp [core]
 }
-
--- Here we start lifting core to space of all triples.
--- Here we lift it from acting on c₁⊗c₂⊗c₃ to acting on c₁₂⊗c₃
-noncomputable
-def coreLift1(n: ℕ)
-             (sw: Coup →ₗ[ℤ] Coup): (Coup ⊗[ℤ] Coup) →ₗ[ℤ] (Coup →ₗ[ℤ] triple) :=
-TensorProduct.lift (coreLin3 n sw)
-
--- Final: Core lifted to c₁₂₃
-noncomputable
-def final(n:ℕ)(sw: Coup →ₗ[ℤ] Coup): triple →ₗ[ℤ] triple := TensorProduct.lift (coreLift1 n sw)
 
 -- Here we are having an example to make sure the abovementioned functionality works as expected
 
@@ -296,28 +300,32 @@ def ex1:triple := TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (
 noncomputable
 def ex2:triple := TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 10 20) (Coup.mk 30 40)) (Coup.mk 50 60)
 
+--Part 4: tests
+
 -- first test theorem to make sure that final works as expected
-theorem test1:final 1 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 2 1) (Coup.mk 3 4)) (Coup.mk 5 6) := by
+theorem test1:final (coreFunc 1 swap) ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 2 1) (Coup.mk 3 4)) (Coup.mk 5 6) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
   simp [coreLin3, coreLin2, coreLin1]
-  simp [core]
+  simp [coreFunc]
   simp [swap]
+  simp [core]
 
-theorem test2:final 2 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) := by
+theorem test2:final (coreFunc 2 swap) ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
   simp [coreLin3, coreLin2, coreLin1]
-  simp [core]
+  simp [coreFunc]
   simp [swap]
+  simp [core]
 
-theorem test3:final 2 swap (ex1+ex2) =
+theorem test3:final (coreFunc 2 swap) (ex1+ex2) =
             TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 4 3)) (Coup.mk 5 6) +
             TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 10 20) (Coup.mk 40 30)) (Coup.mk 50 60) := by
-  have eq: final 2 swap (ex1+ex2) = (final 2 swap ex1) + (final 2 swap ex2) := by
-    aesop
+  have eq: final (coreFunc 2 swap) (ex1+ex2) = (final (coreFunc 2 swap) ex1) + (final (coreFunc 2 swap) ex2) := by
+    simp [final]
   rw [eq]
   clear eq
 
@@ -325,13 +333,16 @@ theorem test3:final 2 swap (ex1+ex2) =
   simp [final]
   simp [coreLift1]
   simp [coreLin3, coreLin2, coreLin1]
-  simp [core]
+  simp [coreFunc]
   simp [swap]
+  simp [core]
 
-theorem test4:final 3 swap ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 3 4)) (Coup.mk 6 5) := by
+
+theorem test4:final (coreFunc 3 swap) ex1 = TensorProduct.tmul ℤ (TensorProduct.tmul ℤ (Coup.mk 1 2) (Coup.mk 3 4)) (Coup.mk 6 5) := by
   simp [ex1]
   simp [final]
   simp [coreLift1]
   simp [coreLin3, coreLin2, coreLin1]
-  simp [core]
+  simp [coreFunc]
   simp [swap]
+  simp [core]
