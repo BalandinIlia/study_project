@@ -25,4 +25,3 @@ import StudyProject.StandardLinearAlgebra.tensorProduct2
 import StudyProject.StandardLinearAlgebra.spaceOfLinearMaps
 import StudyProject.Experiment1
 import StudyProject.ExperimentMonad
-import StudyProject.experimentTen3Spaces
