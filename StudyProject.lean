@@ -21,6 +21,7 @@ import StudyProject.StandardLinearAlgebra.submodule
 import StudyProject.StandardLinearAlgebra.basis
 import StudyProject.StandardLinearAlgebra.matrix
 import StudyProject.StandardLinearAlgebra.tensorProduct
+import StudyProject.StandardLinearAlgebra.tensorProduct2
 import StudyProject.StandardLinearAlgebra.spaceOfLinearMaps
 import StudyProject.Experiment1
 import StudyProject.ExperimentMonad
