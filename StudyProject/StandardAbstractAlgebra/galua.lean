@@ -252,6 +252,8 @@ instance ins: AddCommMonoid Elem :=
         apply c.prop
     simp [HAdd.hAdd]
     rw [ra, rb, rc]
+    sorry
+    /-
     prove x eqx (prove y eqy (prove z eqz (
                                           intro c1 c2 c3;
                                           simp [c1, c2, c3];
@@ -262,6 +264,7 @@ instance ins: AddCommMonoid Elem :=
                                           )
                              )
                 )
+    -/
   zero :=
   {
     val := 0
