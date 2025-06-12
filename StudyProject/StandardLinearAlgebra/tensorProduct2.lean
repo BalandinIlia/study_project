@@ -7,6 +7,8 @@ import Mathlib.LinearAlgebra.TensorPower.Basic
 import StudyProject.StandardLinearAlgebra.definitions
 import StudyProject.StandardLinearAlgebra.moduleInfinite
 
+namespace hi
+
 open scoped TensorProduct
 
 -- ind stays for "index"
