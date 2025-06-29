@@ -4,6 +4,7 @@ import Mathlib.LinearAlgebra.Basis.Basic
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.Quot
+import Mathlib.Algebra.Module.Submodule.Basic
 import StudyProject.StandardLinearAlgebra.definitions
 import StudyProject.StandardLinearAlgebra.moduleInfinite
 
@@ -126,3 +127,39 @@ instance i1:AddCommMonoid pr :=
   nsmul_zero := sorry
   nsmul_succ := sorry
 }
+
+def agr(N: ℕ): Submodule ℤ SeqInf :=
+{
+  carrier := {seq: SeqInf | ∀n:ℕ, n>N → seq n = 0}
+  add_mem' := by
+    intro a b
+    simp
+    intro h₁ h₂
+    intro n h
+    have tr: (a n) + (b n) = 0 → (a+b) n = 0 := by
+      clear N h₁ h₂ h
+      aesop
+    apply tr
+    clear tr
+    let ht₁ := h₁ n h
+    let ht₂ := h₂ n h
+    aesop
+  zero_mem' := by
+    simp
+    aesop
+  smul_mem' := by
+    simp
+    have tr: ∀c:ℤ, ∀x:SeqInf, ∀n:ℕ, (c•x) n = c*(x n) := by
+      simp [HSMul.hSMul]
+      simp [SMul.smul]
+      intro q w e
+      generalize r: w e = j
+      clear N r w e
+      simp [Int.mul_comm]
+    simp [tr]
+    aesop
+}
+
+open Submodule
+
+def binded2(s₁ s₂: SeqInf): Prop := (s₁ + ((-1)•s₂)) ∈ agr 45
